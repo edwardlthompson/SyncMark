@@ -185,8 +185,11 @@ jobs:
       - name: Prepare Android wrapper
         if: hashFiles('examples/android/gradlew') != ''
         run: chmod +x examples/android/gradlew
-      - name: Run feature gate (strict multi-stack)
-        run: bash scripts/feature-gate.sh --stack multi --strict --json
+      - name: Run feature gate (active stack)
+        run: |
+          set -euo pipefail
+          STACK="$(python3 -c "import json; print(json.load(open('bootstrap.config.json'))['stack'])")"
+          bash scripts/feature-gate.sh --stack "$STACK" --strict --json
 
   plugin-pack:
     name: Cursor plugin pack
@@ -324,6 +327,8 @@ jobs:
 
   node:
     name: Node - Lint, Test
+    needs: stack-presence
+    if: needs.stack-presence.outputs.node == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -351,6 +356,7 @@ jobs:
 
   android-structure:
     name: Android - Structure Validation
+    if: hashFiles('examples/android/gradlew') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -392,6 +398,7 @@ jobs:
 
   android-build:
     name: Android - assembleDebug
+    if: hashFiles('examples/android/gradlew') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -598,6 +605,7 @@ jobs:
 
   android-release:
     name: Android - assembleRelease
+    if: hashFiles('examples/android/gradlew') != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

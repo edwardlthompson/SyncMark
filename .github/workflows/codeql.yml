@@ -29,8 +29,7 @@ jobs:
         include:
           - language: javascript-typescript
           - language: python
-          - language: java-kotlin
-            paths: examples/android
+          # java-kotlin / examples/android omitted when Android stack is pruned (web-only SyncMark)
     steps:
       - uses: actions/checkout@v7
       - name: Setup Java (Android)
