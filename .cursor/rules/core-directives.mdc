@@ -1,0 +1,28 @@
+---
+description: Core agent directives — plan-first, 3-strike, token limits
+alwaysApply: true
+---
+
+# Core Directives
+
+Session start: hook context + `BUILD_PLAN` next 🔲 `[AGENT][LOCAL]` + mode (Ask/Plan/Agent/Debug). Do not re-read full START_HERE / AGENTS / CURSOR_MODES every turn. Unreleased: first ~20 lines of CHANGELOG only. UI edits: read `docs/ux-ui-guidelines.md`. If `AGENT.md` exists, read it before sprint rows. FOSS: MIT, no proprietary SDKs on the production path (`foss-compliance.mdc` on demand).
+
+## Plan First, Code Second
+
+- Plan Mode for non-trivial work; Ask for read-only
+- Every plan needs resolved `### Critique` (Issue→Resolution); no open risks
+- Ask the human only for `[HUMAN]` destructive-ops or undiscoverable facts
+
+## BUILD_PLAN
+
+- Sequential before Parallel; respect AGENT / HUMAN / ADB / AUTO
+- Status: 🔲 · ✅ · ❌ (see `BUILD_PLAN.md` legend)
+- Venue: `[LOCAL]` or `[CLOUD]` + `— scope:` on AGENT rows
+
+## 3-Strike
+
+Halt after 3 consecutive failed fixes; escalate.
+
+## Memory / tokens
+
+Update `AGENT_MEMORY.md` only at milestones. Max 300 lines UI+i18n, 150 lines pure logic. Prefer local parallel Task/worktrees over Cloud (`local-compute.mdc` on demand).

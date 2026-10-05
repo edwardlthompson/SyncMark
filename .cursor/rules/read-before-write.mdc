@@ -1,0 +1,10 @@
+---
+description: Inspect types/interfaces before edits; Critique checklist for plans
+alwaysApply: true
+---
+
+# Read-Before-Write
+
+1. Boundaries (types/schemas) → 2. Read upstream → 3. Plan signatures → 4. Edit
+
+Plan `### Critique`: null/empty, timeouts, races, exceptions, and UI (empty/error/loading, focus, tokens, primary action, i18n) each **Resolved** or **N/A**. UTF-8 only (never UTF-16). Mark BUILD_PLAN ✅ only after gates pass.

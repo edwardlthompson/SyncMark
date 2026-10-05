@@ -1,0 +1,44 @@
+{
+  "name": "golden-path-web",
+  "private": true,
+  "license": "MIT",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "format": "biome check --write .",
+    "format:check": "biome check .",
+    "lighthouse": "lhci autorun"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@biomejs/biome": "^2.5.15",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.63.0",
+    "fast-check": "^4.10.2",
+    "jsdom": "^30.1.2",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3",
+    "@vitest/coverage-v8": "^5.0.3"
+  },
+  "overrides": {
+    "tmp": ">=0.2.6",
+    "uuid": ">=11.1.1",
+    "js-yaml": ">=5.4.1",
+    "brace-expansion": ">=5.0.12",
+    "undici": ">=7.29.1 <8.0.0",
+    "ip-address": ">=10.7.1",
+    "basic-ftp": ">=6.2.1",
+    "nanoid": ">=3.3.18",
+    "@puppeteer/browsers": ">=3.2.0",
+    "proxy-agent": ">=8.0.2",
+    "postcss": ">=8.5.23",
+    "qs": ">=6.16.0"
+  }
+}

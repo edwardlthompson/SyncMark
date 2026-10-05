@@ -1,0 +1,139 @@
+# Agent Memory
+
+> Centralized index of tech stack, threat models, persistent context, and retrospectives.
+> Update only at session startups, milestone boundaries, or major architectural pivots.
+
+## Tech Stack
+
+| Layer | Technology | Version | Notes |
+|-------|-----------|---------|-------|
+| Platform | Multi-stack template (Web, Python, Android, Node, optional Lightroom/Blender/Rust/Go) | 1.9.0 | Template maintainer repo |
+| License | MIT | - | Pure FOSS |
+| Distribution | GitHub Releases + GitHub Pages demo | - | F-Droid/Winget stubs for child repos |
+## Active Modules
+
+- ✅ Web / PWA (`modules/web/MODULE.md`)
+- ✅ Python (`modules/python/MODULE.md`)
+- ✅ Android / F-Droid (`modules/android/MODULE.md`)
+- ✅ Node API (`modules/node/MODULE.md`)
+- ✅ Lightroom Classic (`modules/lightroom/MODULE.md`)
+- ✅ Rust (`modules/rust/MODULE.md`)
+- ✅ Go (`modules/go/MODULE.md`)
+- ✅ Blender icon factory (`modules/blender/MODULE.md`)
+
+## Threat Model Checklist
+
+- ✅ `docs/THREAT_MODEL.md` drafted (STRIDE, trust boundaries, top abuse cases, OWASP LLM Top 10 walk)
+- ✅ No proprietary closed-source SDKs in production path
+- ✅ Opt-in only telemetry (GDPR/CCPA compliant); see `docs/PRIVACY.md`
+- ✅ Secrets excluded from VCS (Gitleaks pre-commit)
+- ✅ Dependency vulnerability scanning enabled (local `update-deps --audit` + CodeQL + Trivy + Dependabot backup)
+- ✅ Input validation at all data boundaries
+- ✅ `SECURITY.md` and private vulnerability reporting enabled
+
+## Persistent Context
+
+<!-- product-brief-sync:begin -->
+_Template maintainer: no product AGENT.md. Children write AGENT.md before init._
+<!-- product-brief-sync:end -->
+
+### Project Purpose
+
+FOSS coding-agent bootstrap template: labeled BUILD_PLAN sprints, Golden Path examples, CI guardrails, workspace memory, and design-system cohesion across Web and Android.
+
+### Key Constraints
+
+- Max 300 lines per static data file (UI + i18n), 150 lines per pure logic file
+- Trunk-based development with Conventional Commits
+- Strict type safety and test coverage budgets
+
+### First-run agent
+
+Cline is the first-run agent in Cursor: GitHub sign-in, FREE models, no API keys (no OPENAI_API_KEY and no Codex CLI on the first-time path). Codex remains optional advanced review only (`/codex-review`) and is not part of onboarding, `/tour`, `/prerelease`, or `/ship`.
+
+Golden Path Settings/About/Feedback are a route stack, not three booleans. Web History API and Android BackHandler pop one level; at home Back stays in the app. Persist key `gp.nav.v1` restores location after theme/crash/share-target (web) and rotation/process death (Android). Home chrome is Settings-only; theme, About, and donate live in sectioned Settings/About menus with dropdowns. Ship UI to `docs/ux-ui-guidelines.md`; `/ux-review` uses the same law and writes `UX-NNN` inventory (not Sequential `/build` fuel).
+
+## Session Retrospectives
+
+| 2026-10-04 | v1.9.0 /ship | Smart local + Cline workflows; RP #119; Windows large-file hygiene fix; SBOM on tag | Opt-in Ollama never required for CI/ship; admin-merge RP when branch workflows are action_required |
+| 2026-09-17 | v1.8.0 /ship | M64 cost diet; RP #112; flaky Android instrumented rerun; SBOM+OpenVEX on tag | Leave CodeQL `@v4`; rerun failed CI before admin-merge RP |
+| 2026-09-16 | M64 cost diet + brevity | Demote alwaysApply; `brief-replies`; `--agent` pre-commit; LIGHT_PREFIX; ADR-0009 | Do not re-force foss always-on in sync-cursor-features; `/gates --full` for release |
+| 2026-09-16 | M63 Local/Cloud venues | `[AGENT][LOCAL\|CLOUD]` + scope; lanes; `check-agent-venue`; `/resume` overlap | Do not claim CLOUD on This Computer; gitignored parallel lock is not cross-venue |
+| 2026-09-15 | v1.6.0 /ship | RP #110; construction law + `/ux-review`; `setup-android` `platform-tools` only | Do not install SDK `tools`; dispatch `release.yml` if RP GraphQL flakes after tag |
+| 2026-09-15 | M62 UX construction | `docs/ux-ui-guidelines.md` + always-on `ux-ui.mdc`; `/ux-review` writes UX inventory; `/build` does not auto-drain UX-NNN | Do not dump Golden Path findings while landing the law; Status never backlog/later |
+| 2026-09-14 | Dependabot #109 | Merged `setup-java` 5→6 after rebase + green Android/upgrade-sim | Temurin + java-version only; do not wait on `/update-deps` for Action majors |
+| 2026-09-14 | v1.5.0 /ship | AGENT.md anti-amnesia + Cycles icon factory; RP #108 as 1.5.0 (not 1.4.1); skip blender tests when pruned | Skip `cli` import when blender example pruned |
+| 2026-09-13 | Lightroom #29 + icon QA | Plug-in Manager HUMAN replaced by Lua/SDK gates; blender-icons owns raster export | Do not re-open #29 as HUMAN; Adobe host is optional |
+| 2026-09-11 | v1.4.0 /ship | Monday child template-gap BUILD_PLAN sync; RP #107; patch/minor deps; leave CodeQL `@v4` | Plan-only gaps; Sacred stays HUMAN; no silent `/upgrade` apply |
+| 2026-09-11 | v1.3.0 /push | RP #106 admin-merged; tag+release live; CI green after TBT + instrumented soft skips | Lightroom (#29) stays HUMAN; do not use JUnit Assume on connectedAndroidTest |
+| 2026-09-10 | M58–M61 /build | Espresso 3.7 + agent DX; M58–M61 archived; KB-023 path spaces; Release Please #106 open | Do not fold Unreleased until /push+/ship; merge RP is HUMAN |
+| 2026-09-10 | M58 Espresso + Android 16 | Pin Espresso 3.7; nav Back smoke on phone; Release checkout order; agent-run PATH/micromamba | Do not empty Unreleased mid-sprint; `/push` then `/ship` owns fold; no `/dev/kvm` → use physical device |
+| 2026-09-10 | BUILD_PLAN declutter | Recurring AUTO/AGENT chores left the board; Monday cron owns them | Do not put weekly/monthly 🔲 rows back on BUILD_PLAN or the child template |
+| 2026-09-10 | OpenSSF passing | Project 14564 passing; README badge live; Ollama leftover rejected | Do not require Ollama on this template; ADB leftovers need the host with the phones |
+| 2026-09-10 | M57 Cursor + docs | Grok Bots, marketplace, skills, registry, Automations, Cloud hooks, Canvas, CLI loop, Settings-only tour/print, optional-stack gaps, ADR-0001 gate, ci-gap registry | Do not treat `/tour` backticks as file paths; do not pre-select ADR-0001 |
+| 2026-09-10 | #95/#96 on main | R8 + memory (#95); Settings-only chrome (#96) | Keep minify/shrink + Settings-only chrome; no header ThemeToggle/About/donate |
+| 2026-09-09 | M54 Catalog + Lightroom | Lua lint, tagset factory, SDK bump playbook; MODULE sync; catalog navigation + lightroom-plugin | Do not treat bare `feature-catalog.json` as a repo-root path in smoke |
+| 2026-09-09 | M53 Android distribution | Landed PR #95 R8; F-Droid/Fastlane/AntiFeatures; UnifiedPush sample; signing runbook | Do not commit keystores or add FCM on the FOSS path |
+| 2026-09-09 | Child BUILD_PLAN template | `BUILD_PLAN_TEMPLATE.md` is the product board model; tallies on both plans | Do not put a child playbook back inside this repo’s BUILD_PLAN.md |
+| 2026-09-09 | Sprint smoke + board | Slim BUILD_PLAN; M51–M57 = allideas 1–55; `smoke-sprint --require` before next sprint | Do not chain sprints until every ✅ row is smoked (startup + load order) |
+| 2026-09-09 | M49 Settings chrome | Home chrome is Settings-only; sectioned menus + dropdowns; ThemeToggle removed | Do not put theme/About/donate back in the header; chips are not settings enums |
+| 2026-09-09 | M48 Android runtime budget | Release R8 on; memory limiter/trim Application; Grok Bots optional commercial | Do not add broad keep rules or Credential Manager on FOSS path |
+| 2026-09-05 | v1.1.0 /ship | Merged #90/#92/#94; tagged v1.1.0 + GitHub Release; SBOM/OpenVEX on tag; #86 RP blocked on workflow approve; #93 Linux DX pending | Prefer agent release PR when RP workflows need [HUMAN] approve; Unreleased empty before tag |
+| 2026-09-01 | M47 Cline-first + GP nav | Cline first-run (no keys); web History + Android BackHandler pop one route; persist gp.nav.v1 | Do not put Codex on /tour /prerelease /ship; device Back smoke is [ADB] |
+| 2026-08-28 | v1.0.0 /ship | Cloud agent #81 reviewed+merged; RP #82 cut first stable; Unreleased empty; SBOM+OpenVEX on the tag | Do not merge RP while upgrade-sim still fails on pruned stacks; `Release-As: 1.0.0` beats 0.26.0 |
+| 2026-08-28 | /cleanup HUMAN leftovers | Archived 5 script-closed HUMAN rows; CII, Ollama, Android SDK stay 🔲 | Recurring weekly AUTO stays 🔲 |
+| 2026-08-28 | HUMAN leftover automation | Scripts close Scorecard, crash-proxy-off, mcp.json copy, weekly Dependabot, CODEOWNERS | CII login, Ollama install, and Android licenses stay HUMAN/ADB |
+| 2026-08-28 | /cleanup M46 | Archived M46/M45/M44 AGENT rows; HUMAN leftovers (Scorecard, CII) stay on the board | Recurring weekly AUTO stays 🔲; do not archive Child Playbook templates |
+| 2026-08-28 | /build Slack | `--lane auto` on this template; next AGENT is M46-44+ after merge with PC M46 board | Do not run child Sprint 0 init-project on this repo |
+| 2026-08-27 | /build scoped gates | Per-row `--scope auto`; failed-stack `--skip-preamble` retry; `/gates` wrap-up stays full | Do not treat docs-only as a skip of Sprint wrap-up `/gates` |
+| 2026-08-27 | /build M46 P0 | Force-push deny; go/cargo PATH; System32 bash; Sacred upgrade sim; plugin version; GP JSON schemas | Next: Node/Python About+crash; do not treat /push as force-push approval |
+| 2026-08-27 | M46 /allideas board | Uncapped dump command + 75 BUILD_PLAN rows; `/build --lane auto` reads maintainer board | `/ideas` stays the short ranked menu; HUMAN leftovers (Ollama, DPIA, CII) stay off the AGENT queue |
+| 2026-08-27 | M45 /ideas round 2 | Health CI filter; init hooks; gates status script; Gradle pins apply; SBOM wait; plugin pack; Rust/Go About+crash; F-Droid+Lightroom gates | Crash-proxy stays off until DPIA; `--force` still matches `git push` approval |
+| 2026-08-27 | M44 /ideas ship hygiene | docs/chore no RP bump; Unreleased-first; worktree skip; session-state.json ignore; RP Dependency Review check; Gradle pins; /gates canvas; commit-msg hook | Closed leftover 0.25.1 (#80); local `/gates` needs `pre-commit install --hook-type commit-msg` |
+| 2026-08-27 | M43 local resource packing | RAM-capped parallel feature-gate; `/best-of-n` + `/emulator`; Ollama docs no keys | Do not require Ollama/emulator on `/ship`; CI slot cap 2; dummy GUI string never in git |
+| 2026-08-27 | M42 local-first deps | `/update-deps` + `upd-cli==0.6.2`; `/ship` uses `--local` gate; Dependabot weekly backup; RP dry-run preview | Do not wait on Dependabot PRs before push; full GH gate stays on `/regress` |
+| 2026-08-23 | v0.24.0 /ship | Privacy-feedback feat + TEMPLATE_INDEX fix; RP #72 admin-merge; emptied Unreleased before merge | About-without forbids imports of `about/`; never run that gate via WSL1 `bash` |
+| 2026-08-21 | v0.23.0 /ship | Strict pre-release + about-without Windows write retry; RP #71 admin-merge after e2e seed fix | Playwright `addInitScript` re-runs on reload — only seed lastSeen when unset |
+| 2026-08-20 | v0.22.0 /ship | Emptied Unreleased before push; RP #70 admin-merge after onStart display-mode fix | `decorView.display` is null in onCreate on the CI emulator — apply `preferredDisplayModeId` in onStart |
+| 2026-08-18 | v0.21.0 /ship | CI + Windows upgrade-sim green on feat and fix; RP #69 admin-merge; fold comments leftover notes | Fold is local-only — commit empty Unreleased before push or RP leaves leftovers under the version heading |
+| 2026-08-17 | M39 /ideas Windows PATH + ship hygiene | Shared PATH resolver; agent-run drops PYTHONPATH; fold Unreleased onto RP; Q&A GraphQL + HUMAN line | Do not attach Environments to required-check workflows; keep Unreleased empty only after fold+comment |
+| 2026-08-17 | M38 /ideas ship-hardening | Branch protection now includes Windows upgrade-sim; Python TEMPLATE_INDEX; RP wait skip; lib files ≤150 | `gh` is not on Git Bash PATH unless Program Files is exported |
+| 2026-08-17 | v0.20.0 /ship | Three /ideas rounds + Windows upgrade-sim required; RP #68 admin-merge after CI green on 812a2db | Empty Unreleased before RP; jq.exe CRLF breaks template-index; wait for `release` SBOM |
+| 2026-08-17 | /ideas pass 3 | Windows required check; COACH.md; dirty Unreleased notes; weekly AUTO skip; Codespaces verify; citation date; setup-python pin; build_sprint split | Allowlist leftover oversized lib modules; do not pretend they are under 150 |
+| 2026-08-17 | /ideas pass 2 | Health template-vs-child; pwsh skip; Windows upgrade-sim CI; UTF-8 health; hint JSON split; root md links; Q&A category; pre-commit | Recurring 🔲 maintenance rows are the honest template next-row |
+| 2026-08-17 | /ideas implement-all | Eight ranked items: Windows REPL hang, citation sync, glossary, portable stamp, verify hints, welcome hook, docs links, Discussions | Keep welcome/Discussions opt-in or best-effort; do not fail init when `gh` is missing |
+| 2026-08-16 | v0.19.0 /ship | Tour + portable adapters; CI green after push of unpushed feat; RP #67 admin-merge | Hard gate cannot see CI until HEAD is on origin; wait for `release` published SBOM |
+| 2026-08-16 | Portable first-run | AGENTS.md SoT + thin pointers; GEMINI.md pointer-only; /tour twin in docs/help | Do not add `.agents/agents.md` (second SoT) |
+| 2026-08-16 | Coach layer | BEST_PRACTICES + FIRST_30_DAYS + /coach; justfiles optional | Keep just out of CI |
+| 2026-08-16 | M37 gap close | verify.sh + env schema + commit-msg + Dockerfile; post hooks implemented but opt-in | Keep `.agent/` as indexes only |
+| 2026-08-16 | M36 bootstrap standards | Extended init-project instead of a second generator; 11 engine unit tests; validate-bootstrap --quick green | Full simulate-template-upgrade still the heavy init dry-run |
+| 2026-08-16 | v0.18.3 /ship | Autofix + pre-release green; Codex skip; RP #66 admin-merge; Compose BOM 2026.08.00 | Release assets start empty — wait for `release` published SBOM job |
+| 2026-08-16 | v0.18.2 /push | RP #63 admin-merge after maintainer gates; HEAD CI already green; no extra prepare commit | Keep Unreleased empty before RP or notes land under `chore` |
+| 2026-08-15 | M35 HUMAN open items | Job-scoped workflow tokens; dismissed 65 PinnedDependencies; merged Dependabot #58–#61; radar max 6 | Rebase Dependabot before Feature Gate on stale lockfiles; Scorecard VulnerabilitiesID lags patched HEAD |
+| 2026-08-15 | v0.18.1 /push | `resolve-python.sh` now sets a single executable path so `"$PY"` works; RP #62 admin-merge after CI green | Do not set `PY="py -3"` (quoted invoke fails); keep Unreleased empty before RP or notes land under `chore` |
+| 2026-08-15 | M35 /audit | Shared `resolve-python.sh` skips Store stub; About gate restores from HEAD; slim Unreleased; UTF-8 LF rules | Do not run `python3` on Windows PATH; leave Scorecard + Dependabot PRs to HUMAN |
+| 2026-08-15 | v0.18.0 /ship | M34 thin steals + extract-zip High cleared via `@puppeteer/browsers` 3.2.0; lockfile needed `proxy-agent` 8 for `npm ci`; RP #56 admin-merge | Generate lockfile with Node 22 / `npm ci` locally after overrides; Windows Store `python3` hangs autofix |
+| 2026-08-14 | M34 prior-art thin steals | Honesty labels + handoff + Sacred upgrade column without vendoring cousin repos | Keep fail-open hooks labeled; do not claim `/push` blocks `--force` |
+| 2026-08-12 | v0.17.0 /ship | Branding kit + pitch README generator; RP #55 admin-merge; CI green on feat commit | Trigger Release workflow for SBOM if assets empty after tag |
+| 2026-08-10 | v0.16.0 /ship | Codex + multi-stack autofix in `/prerelease`; fixed About-without Biome stubs; undici/ip-address/nanoid overrides cleared High alerts after push; RP #51 admin-merge | Prefer Git Bash via agent-run on Windows (System32 bash = WSL1 breaks npm); push security lockfile before expecting Dependabot zero |
+| 2026-08-01 | v0.15.2 /ship | Cleared High Dependabot mid-ship (js-yaml, brace-expansion, postcss); RP #50 admin-merge after auto-merge wait | Re-check Dependabot after each push before merge-release-please |
+| 2026-07-22 | v0.15.0 /ship | RP #37 merged; fixed duplicate CHANGELOG Unreleased + Node 25 vitest localStorage before CI green | Confirm single Unreleased before push; watch GH Dependabot banner vs triage script |
+| 2026-07-21 | M33 Cursor feature integration | Native worktrees + permissions + 7 skills + plugin pack + CLI example; commercial docs deepened | Keep pack script globs wholesale when adding skills; residual Auto-review classifier drift |
+| 2026-07-12 | v0.14.1 release | /push merged RP #36; fixed Dependabot alert API + FOSS mcp.json gate | Prefer AUTOMERGE_TOKEN over admin merge fallback for RP |
+| 2026-07-12 | M32 audit | Caught GITHUB_TOKEN automerge skipping push CI; Git Bash preference for Windows agent-run | Completed via HUMAN automation; GitHub MCP enabled locally |
+| 2026-06-13 | v0.6.0 design system | Cross-stack tokens + i18n scaffold | Restore optional-stack CI jobs after large merge |
+| 2026-06-30 | Autonomous /build + HUMAN automation | Grouped human section keeps board readable; automation router backlogs failures only | Release Please PR #20 for 0.12.0 needs human merge |
+## Template Provenance
+
+- **Source template:** `edwardlthompson/agent-project-bootstrap` (self-maintained)
+- **Template version:** `1.9.0` (see `.template-version`)
+- **Last update check:** See `.template-update.json`
+
+### Retrospective — 2026-09-10 (M61)
+
+- M61 allideas 161–200 AGENT rows ✅; smoke-sprint passed; archived @ `ca0edfb`. Open PR #106 merge stays HUMAN.
+## Milestone 2026-09-11 — /push toward 1.3.0
+
+- Folded Unreleased; pushing main for Release Please #106.
+- UnifiedPush ntfy E2E + BroadcastReceiver discovery; HUMAN/ADB waiting automation.
+- About lego: Rust CARGO_PKG_VERSION; Python test_about_parity split.

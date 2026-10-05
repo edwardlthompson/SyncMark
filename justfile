@@ -1,0 +1,51 @@
+# Optional DX. CI does not require `just`.
+# https://github.com/casey/just
+# health is offline-first except optional `gh run list`.
+
+verify:
+    bash scripts/verify.sh
+
+gates:
+    python3 scripts/agent-run.py validate-bootstrap --quick
+
+health:
+    bash scripts/project-health.sh
+
+update-deps-dry:
+    python3 scripts/agent-run.py update-deps -- --dry-run
+
+update-deps:
+    python3 scripts/agent-run.py update-deps -- --apply
+
+audit-deps:
+    python3 scripts/agent-run.py update-deps -- --audit
+
+check-template:
+    python3 scripts/agent-run.py check-template-updates -- --verbose
+
+release-please-dry:
+    python3 scripts/agent-run.py release-please-dry
+
+local-compute:
+    python3 scripts/agent-run.py check-local-compute
+
+recommend-model:
+    python3 scripts/agent-run.py recommend-model
+
+setup-local:
+    python3 scripts/agent-run.py setup-local
+
+local-agent:
+    python3 scripts/agent-run.py setup-local
+
+# Print Linux DX checklist pointer (docs/LINUX_DEV.md)
+linux-dev:
+    python3 scripts/agent-run.py check-local-compute
+    @echo "See docs/LINUX_DEV.md (direnv: cp .envrc.example .envrc && direnv allow)"
+
+android-instrumented:
+    python3 scripts/agent-run.py run-android-emulator-local
+
+# Needs Android SDK. HTML: examples/android/app/build/reports/r8/r8-config-analyzer-release.html
+android-r8-analyze:
+    cd examples/android && ./gradlew :app:analyzeReleaseR8Config

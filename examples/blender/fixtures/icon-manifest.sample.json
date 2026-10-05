@@ -1,0 +1,51 @@
+{
+  "jobs": [
+    {
+      "id": "hero-yaw-0",
+      "seed": 7,
+      "samples": 16,
+      "resolution": 64,
+      "yaw_deg": 0,
+      "camera": {
+        "location": [2.4, -2.4, 1.8],
+        "look_at": [0, 0, 0.2],
+        "focal_mm": 50
+      },
+      "lighting": { "hdri_rotation": 0.2, "intensity": 1 }
+    },
+    {
+      "id": "hero-yaw-25",
+      "seed": 11,
+      "samples": 16,
+      "resolution": 64,
+      "yaw_deg": 25,
+      "camera": {
+        "location": [2.4, -2.4, 1.8],
+        "look_at": [0, 0, 0.2],
+        "focal_mm": 50
+      },
+      "lighting": { "hdri_rotation": 0.4, "intensity": 1.1 }
+    },
+    {
+      "id": "hero-yaw-40",
+      "seed": 19,
+      "samples": 16,
+      "resolution": 64,
+      "yaw_deg": 40,
+      "camera": {
+        "location": [2.4, -2.4, 1.8],
+        "look_at": [0, 0, 0.2],
+        "focal_mm": 50
+      },
+      "lighting": {
+        "hdri_rotation": 0.1,
+        "intensity": 0.9,
+        "area_lights": [
+          { "location": [2.5, -1.5, 3.0], "energy": 250 },
+          { "location": [-2.0, 1.0, 2.5], "energy": 80 },
+          { "location": [0, -3.0, 2.0], "energy": 40 }
+        ]
+      }
+    }
+  ]
+}

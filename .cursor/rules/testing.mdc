@@ -1,0 +1,46 @@
+---
+description: Test coverage budgets and snapshot conventions
+alwaysApply: false
+globs:
+  - "examples/**"
+  - "tests/**"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+---
+
+# Testing Rules
+
+## Coverage Budgets
+
+- Python: `pytest --cov-fail-under=90` with `-n auto` (pytest-xdist; uses local CPU cores)
+- Web unit: Vitest coverage via `npm test` (Vitest parallelizes by default)
+- E2E: Playwright visual snapshots use `maxDiffPixelRatio: 0.02`
+- Android: `./gradlew test --parallel`
+
+## When to Add Tests
+
+- **Test-first:** every `[AGENT]` feature task includes tests, or the feature spec states why tests are not feasible and names the fallback validation command
+- Golden Path features: unit + one integration/e2e path
+- Bug fixes: regression test required
+- Template-only doc changes: no new tests unless a gate/script changed
+
+## Per-feature smoke gate (test pyramid)
+
+- **Unit (many):** required for every new feature's pure logic
+- **Smoke (one):** `watch-agent-gates` after each AGENT step; `smoke-sprint --require` after the sprint/feature is all ✅
+- **E2E (few):** Playwright/Lighthouse at milestone gates, not every feature
+
+```bash
+python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto
+python3 scripts/agent-run.py smoke-sprint --require
+```
+
+Do not start feature B until feature A’s row gates pass and, when the block is all ✅, sprint smoke exits 0.
+
+## Snapshot Updates
+
+Playwright `toHaveScreenshot` baselines live under `e2e/*-snapshots/`. Update intentionally:
+
+```bash
+cd examples/web && npx playwright test --update-snapshots
+```

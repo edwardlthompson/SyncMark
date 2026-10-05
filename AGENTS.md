@@ -1,0 +1,174 @@
+# Agent Router
+
+1. **First read:** hook + `BUILD_PLAN.md` next row (full `docs/START_HERE.md` only on first day / `/tour`)
+2. **Cursor modes:** Ask / Plan / Agent / Debug (`docs/CURSOR_MODES.md` when unsure)
+3. **Why / coach:** `/coach` = one next action · `/tour` · `/ideas` · `/allideas` · `docs/BEST_PRACTICES.md` · `docs/FIRST_30_DAYS.md`
+4. **Bootstrap mode:** `docs/INITIALIZATION_PROMPT.md`
+5. **Reference mode:** `docs/FOR_AGENTS.md` + `TEMPLATE_INDEX.json` (do not load whole index unless `/upgrade`)
+6. **Task board:** `BUILD_PLAN.md` · Status: 🔲 · ✅ · ❌
+7. **Parallel / venue:** `/scope` · Local vs Cloud [ADR-0008](docs/adr/0008-agent-venue.md) · cost diet [ADR-0009](docs/adr/0009-cost-diet-brevity.md)
+8. **Living memory:** `AGENT_MEMORY.md` at milestones only. If `AGENT.md` exists, read before sprint rows.
+
+> Legacy `.cursorrules` is deprecated. Use `.cursor/rules/*.mdc` and this file instead.
+
+## Project Overview & Architecture
+
+<!-- bootstrap-project-card -->
+**Product:** agent-project-bootstrap
+**Purpose:** GitHub Template for FOSS coding-agent projects
+**Stack:** multi
+<!-- /bootstrap-project-card -->
+
+This repository is a **GitHub Template** for FOSS projects with coding agents (Cursor, Windsurf, Antigravity, Claude Code, Copilot, Gemini CLI, Aider, Cline). Child repos start from **Use this template**, then `scripts/init-project.sh` (or `.ps1`). Edit `AGENTS.md`, then `bash scripts/bootstrap-lifecycle.sh --sync-adapters`.
+
+- **Composition:** stack modules (`modules/{stack}/`) + Golden Path examples (`examples/{stack}/`) + agent routing
+- **Lifecycle:** preflight → init (stack, branding, prune) → post hooks (adapters, checklist, manifest)
+- **Manifest:** `bootstrap.config.json` (schema in `bootstrap.config.json.example`)
+- **Product spec:** `docs/spec.md` · plan stub: `docs/plan.md` · feature slices: `docs/features/`
+
+## Environment & Dependency Management
+
+| Tool | Role |
+|------|------|
+| Python 3.11+ | Init, gates, adapters (`scripts/lib/resolve-python.sh`) |
+| Git | Required — preflight fails if missing |
+| Node 22 + npm | Web / Node stacks |
+| uv | Python stack |
+| JDK 17+ | Android stack |
+| Local deps | `python3 scripts/agent-run.py update-deps` (dry-run default; `--apply` / `--audit`). Pin `upd-cli==0.6.2`. Prefer `depsonar_*` MCP when enabled. GitHub Dependabot is weekly backup. |
+Copy `.env.example` → `.env` (never commit `.env`). Lockfiles are required when a stack is present. `/ship` runs `/update-deps` then `pre-release-gate.sh --local` before push.
+
+## Build, Test, and Validation Commands
+
+**Before marking a BUILD_PLAN row ✅**, run the verification harness:
+
+```bash
+bash scripts/verify.sh
+# or
+python3 scripts/agent-run.py verify
+
+```
+
+`--full` also runs `feature-gate` for the active stack. Do not mark the task complete if verify fails.
+
+```bash
+python3 scripts/agent-run.py validate-bootstrap --quick
+python3 scripts/agent-run.py feature-gate --stack <active>
+python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto
+python3 scripts/agent-run.py smoke-sprint --require
+python3 scripts/agent-run.py check-repo-hygiene
+python3 scripts/agent-run.py check-local-compute
+python3 scripts/agent-run.py recommend-model
+python3 scripts/agent-run.py setup-local
+python3 scripts/agent-run.py compress-memory
+
+```
+
+Stack tests: web `npm test`; python `uv run pytest`; Android `./gradlew test`. After init: `PROJECT_CHECKLIST.md`.
+
+## Architecture Constraints
+
+- Pure FOSS under MIT license; no proprietary closed-source SDKs in production path
+- Max 300 lines per static data file (UI + i18n), 150 lines per pure logic file
+- Strict type safety and runtime validation at all data boundaries
+- Core business logic decoupled from layout framework (MVVM / Clean / Hexagonal)
+- Opt-in only telemetry; GDPR/CCPA compliant
+
+## Code Style & Architectural Invariants
+
+- Conventional Commits for all changes
+- Small, modular functions; keep files within token-optimal size
+- Read-before-write: inspect types/interfaces via `@filename` before editing
+- Cursor mode routing per `docs/CURSOR_MODES.md`; Plan for non-trivial tasks with resolved `### Critique`
+- **Brief replies:** 1–3 sentences default (`.cursor/rules/brief-replies.mdc`)
+- **UI construction:** follow [`docs/ux-ui-guidelines.md`](docs/ux-ui-guidelines.md) when editing views (rule loads via globs). Tokens: [`docs/DESIGN_GUIDE.md`](docs/DESIGN_GUIDE.md). Gaps → `UX-NNN` inventory; `/ux-apply UX-NNN`
+
+## Testing & Quality Enforcement
+
+**Test-first:** Every `[AGENT]` feature task must add or update automated tests for the change, **or** document in `docs/features/{name}.md` / `docs/spec.md`:
+
+1. Why automated tests are not feasible
+2. The fallback validation command (for example `feature-gate.sh` or a named smoke script)
+
+Do not mark a BUILD_PLAN feature row ✅ without tests or that justification. Coverage budgets: `.cursor/rules/testing.mdc`.
+
+## Security Guidelines & Commit Conventions
+
+- Conventional Commits; never commit secrets or `.env`
+- Security defaults are on: `SECURITY.md`, local `update-deps --audit` before push, Dependabot (backup), CI, CodeQL, secret scanning
+- Destructive ops (`git push`, production deploys) need `[HUMAN]` approval (see `.cursor/rules/destructive-ops.mdc`)
+- Vulnerability reports: `SECURITY.md` (private reporting)
+
+## Session Protocol
+
+1. Hook context + name next 🔲 `[AGENT][LOCAL]` (or empty board). Mode: Ask/Plan/Agent/Debug. On session start: read `docs/help/SESSION_START.md` (or `START_HERE.md`), pick mode via `docs/CURSOR_MODES.md` (roles if your IDE uses other names), then `BUILD_PLAN.md` Sequential lane. When `gh` is available, run `python3 scripts/agent-run.py sync-open-prs-build-plan -- --apply` before naming the next 🔲 `[AGENT]` row (or say the AGENT board is empty). After Cloud Agent work on another machine, run `/resume` (or bare `resume`) instead of reconstructing context by hand.
+2. Unreleased: skim first ~20 lines of CHANGELOG `[Unreleased]` only — do not load the whole file. If list items exist, say so in one line.
+3. UI edits → `docs/ux-ui-guidelines.md`. `AGENT.md` before sprint rows if present.
+4. If your tool has no slash commands, use `docs/help/*.md` (start with `docs/help/TOUR.md`). In VS Code + Cline, type `/` for project workflows under `.clinerules/workflows/` (see `docs/help/VSCODE_COMMANDS.md`).
+5. When using Ollama or LM Studio, declare venue `[AGENT][LOCAL]` and prefer Plan mode before Act for non-trivial multi-file work. Opt-in setup: `python3 scripts/agent-run.py recommend-model` / `setup-local` / `compress-memory` (never required for CI, init, or `/ship`).
+6. Context budget: prefer targeted reads (`grep` / slices). Do not re-read the same file more than twice without a write or a new plan. On context bloat: update `.agent/session-state.md` (portable) and/or `.cursor-session-state.json` (Cursor `/compact`); optionally run `python3 scripts/agent-run.py compress-memory`. Read only the last ~20 lines of `AGENT_MEMORY.md` on start — never dump the whole file.
+7. When creating or significantly changing a file, state one sentence of why (see `docs/BEST_PRACTICES.md` and `/coach`).
+8. After each AGENT step: `watch-agent-gates --once --autofix --scope auto` (skip re-running full validate mid-slice if that passed). Sprint complete → `smoke-sprint --require` — every ✅ row smoked, no errors/crashes, startup + load order (`docs/SPRINT_SMOKE.md`). `/gates` stays full `feature-gate --stack multi` plus `smoke-sprint --if-complete`.
+9. Milestone: update `AGENT_MEMORY.md` / ADR; append to `DECISION_LOG.md` or `docs/adr/`. Log significant agent actions at milestone boundaries. 3-strike failure (including identical tool calls or identical error messages) → halt. After Cloud → `/resume`.
+10. Repo hygiene: track source only; run `scripts/check-repo-hygiene.sh` before push (see `docs/REPO_HYGIENE.md`).
+
+Replies: 1–3 sentences default (`.cursor/rules/brief-replies.mdc`). Venue: `[LOCAL]`/`[CLOUD]` + `— scope:` ([ADR-0008](docs/adr/0008-agent-venue.md)). Cost diet: [ADR-0009](docs/adr/0009-cost-diet-brevity.md).
+
+## Multi-Agent Adapters
+
+This file is the source of truth. After editing it, sync adapters:
+
+```bash
+bash scripts/bootstrap-lifecycle.sh --sync-adapters
+
+```
+
+| Target | File |
+|--------|------|
+| Cursor | `.cursor/rules/main.mdc` |
+| Claude Code | `CLAUDE.md` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Gemini / Antigravity | `GEMINI.md` (pointer only — never real rules) |
+| Windsurf | `.windsurf/rules/agents-pointer.md` |
+| Cline / Roo | `.clinerules/AGENTS.md` (+ static `.clinerules/workflows/`) |
+| Aider | `CONVENTIONS.md` |
+| Continue | `.continue/rules/agents.md` |
+Do not hand-edit generated adapters. See `docs/AGENT_PORTABILITY.md`.
+
+## Module Activation
+
+Activate only the modules matching your stack. See `modules/*/MODULE.md`.
+
+## Cursor FOSS integrations
+
+Shipped in template (see `docs/CURSOR_INTEGRATIONS.md`):
+
+- **Hooks** — `.cursor/hooks.json` enforces destructive-ops + UTF-8 (fail-open; `/push` session override)
+- **Skills** — `.cursor/skills/` companions for `/gates`, `/scope`, `/fix`, hygiene, Sprint 0, features, canvas, `/update-deps`, `/best-of-n`, local models, `/emulator`, `/adr`, `/ux-review`, blender-icons
+- **Subagents (3)** — `.cursor/agents/` verifier, gate-fixer, explorer
+- **Local compute first** — `.cursor/rules/local-compute.mdc`: This Computer + parallel Task/worktrees/`/best-of-n`; RAM-capped parallel `feature-gate` stacks; optional `/emulator`; Linux DX in `docs/LINUX_DEV.md`
+- **Worktrees** — `.cursor/worktrees.json` + fail-soft OS setup (`/worktree`, `/best-of-n`)
+- **Auto-review** — `.cursor/permissions.json` dual layer with hooks
+- **Plugin pack** — `.cursor-plugin/plugin.json` + `scripts/pack-cursor-plugin.*` → `dist/cursor-plugin/`
+- **CLI (opt-in)** — `docs/CURSOR_CLI.md` + `.github/workflow-examples/cursor-agent.yml`
+- **Cline (first-run)** — recommended extension `saoudrizwan.claude-dev`; GitHub sign-in + FREE model; no API keys. See `docs/help/CLINE.md`. Autonomous hands for a new user are Cline in Cursor (human-in-the-loop diffs), not a paid CLI.
+- **Optional MCP** — copy `.cursor/mcp.foss.example` → gitignored `.cursor/mcp.json` (GitHub + pinned `depsonar@4`; GitHub token not required for depsonar)
+
+Validate: `python3 scripts/agent-run.py check-cursor-hooks -- --smoke`, `python3 scripts/agent-run.py check-cursor-integrations -- --tier foss`
+
+## Cursor Commercial integrations
+
+Hidden on FOSS bootstrap (`distribution_tier: foss` in `.cursor/stack-selection.json`). When `--distribution-tier commercial`:
+
+- `commercial-compliance.mdc` replaces active FOSS compliance rule
+- Activate Cloud/Bugbot/MCP via `docs/CURSOR_COMMERCIAL_ACTIVATION.md`
+- Android proprietary patterns: `modules/android/COMMERCIAL.md`
+
+Router reads `distribution_tier` from `.cursor/stack-selection.json` (set by `init-project.sh`).
+
+## Ecosystem-Specific Rules
+
+- **Android:** FOSS only; reproducible builds with `SOURCE_DATE_EPOCH`
+- **Web/PWA:** Offline-first service workers; Lighthouse budget gates
+- **Python:** Strict typing (mypy), ruff lint/format, locked dependencies
+- **Lightroom:** Adobe SDK Lua API only (`Lr*` namespaces)

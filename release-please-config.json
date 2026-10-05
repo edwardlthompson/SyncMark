@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": ".template-version"
+        },
+        {
+          "type": "json",
+          "path": "TEMPLATE_INDEX.json",
+          "jsonpath": "$.template_version"
+        },
+        {
+          "type": "yaml",
+          "path": "CITATION.cff",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": ".cursor-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ],
+      "include-component-in-tag": false,
+      "include-v-in-tag": true
+    }
+  },
+  "changelog-sections": [
+    { "type": "feat", "section": "Added" },
+    { "type": "fix", "section": "Fixed" },
+    { "type": "perf", "section": "Changed" },
+    { "type": "revert", "section": "Changed" },
+    { "type": "docs", "section": "Documentation", "hidden": true },
+    { "type": "chore", "section": "Miscellaneous", "hidden": true },
+    { "type": "ci", "section": "Miscellaneous", "hidden": true },
+    { "type": "test", "section": "Miscellaneous", "hidden": true }
+  ],
+  "exclude-paths": [
+    "docs/**",
+    "docs/help/**",
+    ".cursor/commands/**",
+    ".cursor/skills/**",
+    ".cursor/agents/**",
+    "CONTRIBUTING.md",
+    "SUPPORT.md",
+    "CODE_OF_CONDUCT.md"
+  ]
+}

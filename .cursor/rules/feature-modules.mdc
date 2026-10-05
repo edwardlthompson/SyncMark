@@ -1,0 +1,26 @@
+---
+description: Vertical-slice features; one row; scoped gates after AGENT steps
+alwaysApply: true
+---
+
+# Feature Modules
+
+- One BUILD_PLAN feature row per task; vertical slice (logic/view/tests/i18n)
+- Thin wiring ≤10 lines in composition roots
+- Sequential before Parallel; venue `[LOCAL]`/`[CLOUD]` + `— scope:`
+
+After every AGENT step:
+
+```bash
+python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto
+```
+
+Do not re-run full `validate-bootstrap` mid-slice if watch-agent-gates already passed. Exit 1 → autofix in scope (3-strike). Exit 2 → halt.
+
+After last `[AGENT]`/`[AUTO]` in the sprint is ✅:
+
+```bash
+python3 scripts/agent-run.py smoke-sprint --require
+```
+
+See `docs/FEATURE_MODULES.md` · `docs/SPRINT_SMOKE.md`.

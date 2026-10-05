@@ -1,0 +1,259 @@
+name: Weekly Health Check
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  detect-stacks:
+    name: Detect active stacks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      android: ${{ steps.stacks.outputs.android }}
+      repo_mode: ${{ steps.mode.outputs.repo_mode }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: stacks
+        run: |
+          if [ -f examples/android/gradlew ]; then
+            echo "android=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "android=false" >> "$GITHUB_OUTPUT"
+          fi
+      - id: mode
+        run: |
+          MODE="$(python3 scripts/lib/repo_mode.py .)"
+          echo "repo_mode=${MODE}" >> "$GITHUB_OUTPUT"
+          echo "Detected repo mode: ${MODE}"
+
+  health:
+    name: Weekly Workflow Health
+    runs-on: ubuntu-latest
+    needs: detect-stacks
+    permissions:
+      contents: write
+      actions: write
+      security-events: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify CI + Security Scan + CodeQL green on HEAD
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # --dispatch-if-missing covers Dependabot merges that used GITHUB_TOKEN
+          # (those push events do not start CI/Security/CodeQL).
+          bash scripts/check-github-ci.sh "$(git rev-parse HEAD)" --wait 600 --dispatch-if-missing
+
+      - name: Feedback inbox warning
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/lib/feedback_inbox_cli.py > /tmp/inbox.json || true
+          python3 - <<'PY'
+          import json, os, pathlib
+          path = pathlib.Path("/tmp/inbox.json")
+          try:
+              data = json.loads(path.read_text(encoding="utf-8") or "{}")
+          except Exception:
+              data = {}
+          n = len(data.get("fixes") or [])
+          summary = pathlib.Path(os.environ.get("GITHUB_STEP_SUMMARY") or "inbox.md")
+          summary.write_text(f"Open crash/bug fixes: {n}\n", encoding="utf-8")
+          if n:
+              print(f"::warning::{n} open crash/bug issues")
+          PY
+
+      - name: Security triage (Dependabot + Scorecard)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/check-security-triage.sh
+
+      - name: Dependency dry-run
+        continue-on-error: true
+        run: |
+          python3 -m pip install --quiet "upd-cli==0.6.2"
+          python3 scripts/agent-run.py update-deps
+
+      - name: Dependabot leftover list
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr list --label dependencies --state open --json number,title,url \
+            --jq '"Open Dependabot PRs: " + (length|tostring), (.[] | "- #\(.number) \(.title) \(.url)")'
+
+      - name: Sync open PRs into BUILD_PLAN
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/sync-open-prs-build-plan.sh --apply
+          if git diff --quiet -- BUILD_PLAN.md; then
+            echo "No BUILD_PLAN open-prs-sync changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BUILD_PLAN.md
+          git commit -m "chore(build-plan): sync open Dependabot and release PRs"
+          if git push; then
+            exit 0
+          fi
+          echo "Push rejected; retry once after pull --rebase"
+          git pull --rebase
+          git push
+
+      - name: Sync template gaps into BUILD_PLAN (child)
+        if: needs.detect-stacks.outputs.repo_mode == 'child'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/sync-template-gaps-build-plan.sh --apply
+          if git diff --quiet -- BUILD_PLAN.md; then
+            echo "No BUILD_PLAN template-gaps-sync changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BUILD_PLAN.md
+          git commit -m "chore(build-plan): sync template gaps from parent"
+          if git push; then
+            exit 0
+          fi
+          echo "Push rejected; retry once after pull --rebase"
+          git pull --rebase
+          git push
+
+      - name: Latest release SBOM
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/wait-release-sbom.sh --wait 15
+
+      - name: Simulate template upgrade path
+        if: needs.detect-stacks.outputs.repo_mode == 'template'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/simulate-template-upgrade.sh
+
+  upgrade-windows:
+    name: Weekly Upgrade Simulation (Windows)
+    runs-on: windows-latest
+    needs: detect-stacks
+    if: needs.detect-stacks.outputs.repo_mode == 'template'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Simulate template upgrade path
+        shell: bash
+        env:
+          PYTHON_BASIC_REPL: "1"
+          PYTHONUNBUFFERED: "1"
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: "1"
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/simulate-template-upgrade.sh
+
+      - name: Setup Node for npm audit
+        if: hashFiles('examples/web/package-lock.json') != ''
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: examples/web/package-lock.json
+
+      - name: npm audit (examples/web)
+        if: hashFiles('examples/web/package-lock.json') != ''
+        run: |
+          cd examples/web
+          npm ci
+          npm audit --audit-level=high
+
+      - name: Setup uv for Python audit
+        if: hashFiles('examples/python/uv.lock') != ''
+        uses: astral-sh/setup-uv@v7
+
+      - name: uv pip audit (examples/python)
+        if: hashFiles('examples/python/uv.lock') != ''
+        run: |
+          cd examples/python
+          uv sync --locked --all-extras
+          uv pip audit
+
+      - name: pytest smoke (examples/python)
+        if: hashFiles('examples/python/uv.lock') != ''
+        run: |
+          cd examples/python
+          uv sync --locked --all-extras
+          uv run pytest -q
+
+      - name: Setup Node for examples/node audit
+        if: hashFiles('examples/node/package-lock.json') != ''
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: examples/node/package-lock.json
+
+      - name: npm audit (examples/node)
+        if: hashFiles('examples/node/package-lock.json') != ''
+        run: |
+          cd examples/node
+          npm ci
+          npm audit --audit-level=high
+
+      - name: Cursor feature radar (non-blocking)
+        continue-on-error: true
+        run: bash scripts/cursor-feature-radar.sh
+
+      - name: Upload radar report
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: cursor-radar-report
+          path: CURSOR_RADAR_REPORT.md
+          if-no-files-found: warn
+
+  android-instrumented:
+    name: Weekly Android Instrumented Smoke
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: detect-stacks
+    if: needs.detect-stacks.outputs.android == 'true'
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Sync exemplar app-update/donations assets
+        run: bash scripts/sync-exemplar-config.sh
+      - name: Enable KVM for emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run instrumented smoke test
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 34
+          arch: x86_64
+          target: default
+          disable-animations: true
+          script: cd examples/android && chmod +x gradlew && ./gradlew connectedDebugAndroidTest --no-daemon
