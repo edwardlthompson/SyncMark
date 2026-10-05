@@ -1,23 +1,23 @@
 {
-  "mode": "template",
-  "name": "Golden Path",
-  "short_name": "GoldenPath",
-  "tagline": "FOSS apps with a clear path from idea to release",
-  "pitch": "Golden Path is the reference product identity shipped with agent-project-bootstrap: a privacy-respecting FOSS stack with design tokens, CI guardrails, and agent-ready sprints so you can go from template to a shippable app without reinventing the foundation.",
+  "mode": "product",
+  "name": "SyncMark",
+  "short_name": "SyncMark",
+  "tagline": "Your bookmarks, one folder, every browser — no account required",
+  "pitch": "SyncMark is a local-first browser extension that unifies bookmarks across Chrome, Edge, Firefox, and friends. Point it at a folder you own, import existing bookmarks, check dead links, accept or reject category suggestions, and pair other browsers with a short code. No login, no project-operated cloud — your links stay on disk under your control.",
   "features": [
-    "Cross-stack design tokens with light, dark, and system themes",
-    "Labeled BUILD_PLAN sprints for humans, agents, and CI",
-    "Web PWA and Android FOSS golden-path stubs ready to prune or extend",
-    "Security defaults: Dependabot, CodeQL, gitleaks, and weekly triage docs",
-    "Replaceable branding kit — swap logos and colors when your identity is ready"
+    "Unify bookmarks from multiple browsers into one user-owned folder",
+    "Pair additional browsers with a short code — no accounts or OAuth",
+    "Dead-link health status that never auto-deletes your bookmarks",
+    "Category and tag suggestions you always confirm before applying",
+    "Export to HTML, JSON, or Markdown; works offline by default"
   ],
   "quick_start": [
-    "Clone the repo and run `./scripts/init-project.sh` (or `.\\scripts\\init-project.ps1` on Windows).",
-    "Open your coding agent and follow `docs/START_HERE.md`. First-time walk: `docs/help/TOUR.md` (Cursor: `/tour`).",
-    "Set `branding/product.json` `mode` to `product`, fill name/tagline/pitch, then run `python3 scripts/generate-project-readme.py`."
+    "Clone the repo and open `extension/` (Node 20+).",
+    "Run `npm install` then `npm test` and `npm run build`.",
+    "Load the unpacked build in Chrome/Edge (`dist/chromium`) or Firefox (`dist/firefox`), choose a SyncMark folder, and import bookmarks."
   ],
-  "install": "Requirements depend on your active stack (Node 20+, Python 3.11+, Android SDK). See the active `modules/{stack}/MODULE.md` and `examples/{stack}/README.md`.",
-  "usage": "Use `/bootstrap` for Sprint 0, `/build` for features, and `/verify` before merge. Edit colors in `design-tokens/design-tokens.json` and logos in `branding/assets/`, then run `python3 scripts/sync-design-tokens.py`.",
+  "install": "Node 20+ for building the extension. Load unpacked from `extension/dist/chromium` or `extension/dist/firefox`. See `extension/README.md` and `modules/web/MODULE.md`.",
+  "usage": "Create or open a SyncMark folder in Options, import bookmarks, share a pairing code with another browser pointing at the same (or Syncthing/Dropbox-synced) folder. Use Review to accept category suggestions; run Check links on demand. Export anytime from Options.",
   "urls": {
     "docs": "docs/START_HERE.md",
     "contributing": "CONTRIBUTING.md",
@@ -25,17 +25,15 @@
     "license": "LICENSE",
     "design": "docs/DESIGN_GUIDE.md",
     "branding": "branding/BRANDING.md",
-    "github_repo": "edwardlthompson/agent-project-bootstrap"
+    "github_repo": "edwardlthompson/SyncMark"
   },
   "badge": {
-    "primary": "e94560",
-    "secondary": "4A5F82",
+    "primary": "2B6A4F",
+    "secondary": "3D5A6C",
     "license": "2ea043",
     "foss": "656d76"
   },
   "stacks": [
-    "web",
-    "python",
-    "android"
+    "web"
   ]
 }

@@ -1355,3 +1355,14 @@ Post-M19 review: close prompt/read-order gaps and enforce CURSOR_MODES in bootst
 - ✅ [AGENT] Android About parity: DonationsLoader, ReleaseTagFetcher, GoldenPathApp composition root
 - ✅ [AGENT] Opt-in update checks default `off`; About interval UI removed (Settings toggle only)
 - ✅ [AGENT] CI/release: CodeQL java-kotlin, node SBOM + health-check audit
+
+## SyncMark MVP (Sprints 1–4) — 2026-10-05
+
+- Extension MV3 Chromium + Firefox under `extension/`
+- Space create/open via `*.syncmark.json` bundle; pairing code `SM-…`
+- Browser bookmark import + URL dedupe
+- Rule-based category suggestions + Review existing (confirm-only)
+- On-demand dead-link checker (advisory, non-destructive)
+- Search + export HTML / JSON / Markdown
+- Tests: `cd extension && npm test` (14) · build: `npm run build`
+- Spec/ADR: `docs/spec.md`, `docs/adr/0001-core-architecture.md`, `docs/features/syncmark-folder.md`

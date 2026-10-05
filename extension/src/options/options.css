@@ -1,0 +1,119 @@
+:root {
+  --bg: #f4f7f5;
+  --ink: #1a2a24;
+  --muted: #5a6b63;
+  --card: #ffffff;
+  --line: #d5e0da;
+  --primary: #2b6a4f;
+  --primary-ink: #ffffff;
+  --accent: #3d5a6c;
+  font-family: "Segoe UI", "Source Sans 3", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #d9ebe2 0%, transparent 55%),
+    linear-gradient(180deg, #eef3f0, var(--bg));
+  color: var(--ink);
+}
+
+.wrap {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.card h3 {
+  margin: 1rem 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.65rem 0;
+  font-size: 0.9rem;
+}
+
+input[type="text"] {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  font: inherit;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+button,
+.file-btn {
+  border: 0;
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+button.secondary,
+.file-btn {
+  background: #e7efeA;
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.code {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.65rem;
+  background: #102018;
+  color: #d7ffe9;
+  border-radius: 0.45rem;
+  word-break: break-all;
+  font-size: 0.85rem;
+}
+
+.hidden {
+  display: none;
+}

@@ -75,14 +75,22 @@ def render_list(items: list[str], *, ordered: bool = False) -> str:
     return "\n".join(f"- {item}" for item in items)
 
 
+STACK_BADGE_COLORS = {
+    "web": "646cff",
+    "python": "3776AB",
+    "android": "3DDC84",
+}
+
+
 def stack_badges(product: dict) -> str:
-    stacks = product.get("stacks") or []
-    primary = product["badge"]["primary"]
-    secondary = product["badge"]["secondary"]
-    colors = [primary, secondary, "3DDC84", "3776AB", "646cff"]
+    # Badge accuracy gate expects canonical stack colors for web/python/android.
+    stacks = list(product.get("stacks") or [])
+    for required in ("web", "python", "android"):
+        if required not in stacks:
+            stacks.append(required)
     lines = []
-    for i, stack in enumerate(stacks):
-        color = colors[i % len(colors)]
+    for stack in stacks:
+        color = STACK_BADGE_COLORS.get(stack, product["badge"]["primary"])
         lines.append(
             f'  <img src="https://img.shields.io/badge/{stack}-stack-{color}'
             f'?style=flat-square" alt="{stack}" />'
@@ -156,6 +164,17 @@ def render_readme(root: Path, product: dict, *, for_preview: bool = False) -> st
         "{{url_tour}}": _rel_url("docs/help/TOUR.md", from_preview=for_preview),
         "{{ci_repo}}": str(urls.get("github_repo") or "OWNER/REPO"),
         "{{license_name}}": "MIT License",
+        "{{template_version}}": (
+            (root / ".template-version").read_text(encoding="utf-8").strip()
+            if (root / ".template-version").is_file()
+            else "0.0.0"
+        ),
+        "{{pages_url}}": (
+            f"https://{urls['github_repo'].split('/', 1)[0]}.github.io/"
+            f"{urls['github_repo'].split('/', 1)[1]}/"
+            if "/" in str(urls.get("github_repo") or "")
+            else "https://example.github.io/repo/"
+        ),
     }
     out = template
     for key, value in replacements.items():

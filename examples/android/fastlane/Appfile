@@ -1,2 +1,0 @@
-# FOSS listing identity. Do not add a Play Console JSON key on this path.
-package_name("dev.foss.goldenpath")

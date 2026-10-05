@@ -5,6 +5,7 @@
 - **Deciders:** Project team
 
 > Template for child repositories. Template-repo baseline ADR is `docs/adr/0000-template-baseline.md`.
+> SyncMark’s accepted local-folder + pairing decision lives in [`0010-local-folder-pairing.md`](0010-local-folder-pairing.md).
 
 ## Context
 

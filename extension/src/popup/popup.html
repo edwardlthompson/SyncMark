@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SyncMark</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <strong>SyncMark</strong>
+      <a href="../options/options.html" target="_blank" rel="noreferrer">Settings</a>
+    </header>
+
+    <section id="empty" class="panel hidden">
+      <p>No SyncMark space yet.</p>
+      <a class="btn primary" href="../options/options.html" target="_blank" rel="noreferrer">Open settings</a>
+    </section>
+
+    <section id="main" class="panel hidden">
+      <label>
+        Search
+        <input id="search" type="search" placeholder="Title, tag, or site" />
+      </label>
+
+      <div class="save card">
+        <h2>Save this page</h2>
+        <label>Title <input id="saveTitle" type="text" /></label>
+        <label>URL <input id="saveUrl" type="url" /></label>
+        <p id="suggestion" class="muted"></p>
+        <label>Category <input id="saveCategory" type="text" /></label>
+        <div class="row">
+          <button type="button" id="btnUseSuggestion" class="secondary">Use suggestion</button>
+          <button type="button" id="btnSave" class="primary">Save bookmark</button>
+        </div>
+        <p id="saveMsg" class="muted" role="status"></p>
+      </div>
+
+      <div class="row">
+        <button type="button" id="btnReview" class="secondary">Review suggestions</button>
+        <button type="button" id="btnRefresh" class="secondary">Refresh</button>
+      </div>
+
+      <ul id="list" class="list"></ul>
+      <div id="review" class="review hidden"></div>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

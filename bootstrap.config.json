@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "project_name": "agent-project-bootstrap",
-  "purpose": "GitHub Template for FOSS coding-agent projects",
-  "stack": "multi",
+  "project_name": "SyncMark",
+  "purpose": "Local-first browser extension that unifies bookmarks across browsers with dead-link checks, category suggestions, and folder sync via pairing code \u2014 no accounts, no cloud",
+  "stack": "web",
   "license": "MIT",
   "distribution_tier": "foss",
   "agent_adapters": {
@@ -29,5 +29,12 @@
     "post_install_deps": false,
     "post_run_tests": false,
     "post_welcome_issue": false
+  },
+  "crash_proxy": {
+    "enabled": false
+  },
+  "crash_inbox": {
+    "enabled": false,
+    "provider": "none"
   }
 }

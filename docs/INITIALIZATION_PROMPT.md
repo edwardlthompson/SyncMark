@@ -4,9 +4,9 @@ You are a Senior Software Architect and Expert AI Coding Agent. Follow this temp
 
 ## 1. Project Dimensions
 
-**Platform/Tech Stack:** [INSERT PLATFORM / TECH STACK HERE]
+**Platform/Tech Stack:** web
 
-**Purpose & Goals:** [INSERT DETAILED APP DESCRIPTION AND GOALS HERE]
+**Purpose & Goals:** Local-first browser extension that unifies bookmarks across browsers with dead-link checks, category suggestions, and folder sync via pairing code — no accounts, no cloud
 
 **Original brief:** After clone, copy `AGENT.md.example` → `AGENT.md` and paste this prompt **verbatim** **before** `init-project`. Init stamps `AGENTS.md` only.
 

@@ -1,9 +1,9 @@
 {
   "template_version": "1.9.0",
   "project": {
-    "name": "agent-project-bootstrap",
-    "purpose": "GitHub Template for FOSS coding-agent projects",
-    "stack": "multi"
+    "name": "SyncMark",
+    "purpose": "Local-first browser extension that unifies bookmarks across browsers with dead-link checks, category suggestions, and folder sync via pairing code — no accounts, no cloud",
+    "stack": "web"
   },
   "entry_points": {
     "bootstrap": "docs/START_HERE.md",
@@ -594,22 +594,8 @@
       "owner": "maintainer"
     },
     {
-      "path": "examples/python/justfile",
-      "purpose": "Optional Python Golden Path just recipes",
-      "read_when": "stack_selection",
-      "update_when": "milestone_boundary",
-      "owner": "maintainer"
-    },
-    {
       "path": "examples/web/justfile",
       "purpose": "Optional Web Golden Path just recipes",
-      "read_when": "stack_selection",
-      "update_when": "milestone_boundary",
-      "owner": "maintainer"
-    },
-    {
-      "path": "examples/android/justfile",
-      "purpose": "Optional Android Golden Path just recipes",
       "read_when": "stack_selection",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
@@ -1626,20 +1612,6 @@
       "path": "docs/OPTIONAL_STACKS.md",
       "purpose": "Optional stack modules (Lightroom, Rust, Go, Node) not in default init picker",
       "read_when": "stack_selection",
-      "update_when": "milestone_boundary",
-      "owner": "maintainer"
-    },
-    {
-      "path": "modules/node/MODULE.md",
-      "purpose": "Node.js API module guide (Hono Golden Path)",
-      "read_when": "milestone_boundary",
-      "update_when": "milestone_boundary",
-      "owner": "maintainer"
-    },
-    {
-      "path": "examples/node/",
-      "purpose": "Hono + TypeScript + Vitest API stub",
-      "read_when": "milestone_boundary",
       "update_when": "milestone_boundary",
       "owner": "maintainer"
     },
@@ -2988,13 +2960,6 @@
       "owner": "maintainer"
     },
     {
-      "path": "examples/android/app/proguard-rules.pro",
-      "purpose": "Narrow release R8 keep attributes (no package-wide keeps)",
-      "read_when": "android_release",
-      "update_when": "milestone_boundary",
-      "owner": "maintainer"
-    },
-    {
       "path": "scripts/sync-open-prs-build-plan.sh",
       "purpose": "Mirror open Dependabot/Release Please PRs into BUILD_PLAN managed block",
       "read_when": "session_start",
@@ -3228,20 +3193,10 @@
     }
   ],
   "modules": {
-    "android": {
-      "guide": "modules/android/MODULE.md",
-      "example": "examples/android",
-      "activate_when": "stack includes Android or F-Droid"
-    },
     "web": {
       "guide": "modules/web/MODULE.md",
       "example": "examples/web",
       "activate_when": "stack includes PWA, web, or static site"
-    },
-    "python": {
-      "guide": "modules/python/MODULE.md",
-      "example": "examples/python",
-      "activate_when": "stack includes Python application"
     },
     "lightroom": {
       "guide": "modules/lightroom/MODULE.md",
@@ -3262,11 +3217,6 @@
       "guide": "modules/blender/MODULE.md",
       "example": "examples/blender",
       "activate_when": "optional Cycles/OptiX icon factory; see docs/OPTIONAL_STACKS.md"
-    },
-    "node": {
-      "guide": "modules/node/MODULE.md",
-      "example": "examples/node",
-      "activate_when": "stack includes Node.js HTTP API"
     }
   },
   "roadmap": {

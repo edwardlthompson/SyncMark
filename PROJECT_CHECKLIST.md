@@ -1,7 +1,7 @@
 # Project Checklist
 
 > Generated after `scripts/init-project`. Status: 🔲 open · ✅ done · ❌ blocked.
-> Project: **agent-project-bootstrap** · Stack: `multi` · License: `MIT`
+> Project: **SyncMark** · Stack: `web` · License: `MIT`
 
 ## Setup
 
@@ -31,5 +31,5 @@
 ## Next
 
 1. `python3 scripts/agent-run.py validate-bootstrap --quick`
-2. `python3 scripts/agent-run.py feature-gate --stack multi`
+2. `python3 scripts/agent-run.py feature-gate --stack web`
 3. `scripts/setup-github-repo.sh` (or `.ps1`) for alerts and branch protection

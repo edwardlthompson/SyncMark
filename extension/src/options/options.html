@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SyncMark settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header>
+        <h1>SyncMark</h1>
+        <p class="lede">Your bookmarks stay in a folder you own. No account. No cloud from us.</p>
+      </header>
+
+      <section class="card" id="setup">
+        <h2>Your SyncMark space</h2>
+        <p id="spaceStatus" class="muted">No space yet. Create one or open a saved SyncMark file.</p>
+        <label>
+          Space name
+          <input id="spaceName" type="text" placeholder="My bookmarks" autocomplete="off" />
+        </label>
+        <div class="row">
+          <button type="button" id="btnCreate" class="primary">Create SyncMark space</button>
+          <label class="file-btn">
+            Open SyncMark file
+            <input id="fileOpen" type="file" accept="application/json,.json,.syncmark.json" hidden />
+          </label>
+        </div>
+        <div id="pairingBox" class="hidden">
+          <h3>Pairing code</h3>
+          <p class="muted">Enter this in another browser after it opens the same SyncMark file (or a copy kept in sync).</p>
+          <code id="pairingCode" class="code"></code>
+          <button type="button" id="btnCopyPair" class="secondary">Copy code</button>
+          <button type="button" id="btnExportBundle" class="secondary">Download SyncMark file</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Join an existing space</h2>
+        <label>
+          Pairing code
+          <input id="joinCode" type="text" placeholder="SM-XXXXXXXXXX-XXXXXXXXXXXXXXXX" autocomplete="off" />
+        </label>
+        <label class="file-btn">
+          Choose SyncMark file to join
+          <input id="fileJoin" type="file" accept="application/json,.json,.syncmark.json" hidden />
+        </label>
+        <p id="joinMsg" class="muted" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Import &amp; health</h2>
+        <div class="row">
+          <button type="button" id="btnImport" class="primary">Import from this browser</button>
+          <button type="button" id="btnCheckLinks" class="secondary">Check links</button>
+        </div>
+        <p id="importMsg" class="muted" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Export</h2>
+        <div class="row">
+          <button type="button" id="btnExportHtml" class="secondary">HTML</button>
+          <button type="button" id="btnExportJson" class="secondary">JSON</button>
+          <button type="button" id="btnExportMd" class="secondary">Markdown</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

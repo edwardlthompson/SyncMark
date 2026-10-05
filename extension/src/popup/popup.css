@@ -1,0 +1,136 @@
+:root {
+  --bg: #f3f7f5;
+  --ink: #1a2a24;
+  --muted: #5a6b63;
+  --line: #d5e0da;
+  --primary: #2b6a4f;
+  --card: #fff;
+  font-family: "Segoe UI", "Source Sans 3", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  width: 360px;
+  max-height: 560px;
+  overflow: auto;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+header a {
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+.panel {
+  padding: 0.75rem 0.9rem 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.4rem 0;
+  font-size: 0.85rem;
+}
+
+input {
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  padding: 0.65rem 0.7rem;
+  margin: 0.6rem 0;
+}
+
+.card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.45rem 0;
+}
+
+button,
+.btn {
+  border: 0;
+  border-radius: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.secondary {
+  background: #e7efea;
+  color: #3d5a6c;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.list li {
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+
+.list a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.health-dead {
+  color: #9b2c2c;
+}
+
+.hidden {
+  display: none;
+}
+
+.review-item {
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  padding: 0.5rem;
+  margin: 0.4rem 0;
+  background: #fff;
+  font-size: 0.8rem;
+}

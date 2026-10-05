@@ -34,7 +34,21 @@
 ## Persistent Context
 
 <!-- product-brief-sync:begin -->
-_Template maintainer: no product AGENT.md. Children write AGENT.md before init._
+> Read `AGENT.md` before any sprint row.
+
+**One-liner:** Local-first, self-hosted browser extension that unifies bookmarks across browsers, checks dead links, suggests categories, and syncs via a user-owned folder + pairing code — no accounts, no cloud required.
+**Do not drift:** local-first, self-hosted, browser-extension, webextensions, bookmarks, dead-link-checker, category-suggestions, folder-sync, pairing-code, p2p-ish, privacy, foss, no-cloud, no-login
+
+**Rules:**
+- Pure FOSS under MIT. No proprietary SDKs, no mandatory cloud, no user accounts, no OAuth in the core product.
+- Local-first: all bookmark data lives in a user-chosen folder on disk. The extension never sends bookmark content to any remote server operated by the project.
+- Pairing is done with a short human-enterable code (or QR) that lets another browser/device join the same SyncMark space by pointing at the same (or synced) folder and sharing a secret for integrity.
+- Auto-categorization only **suggests**; the user always makes the final decision. Suggestions appear on every new save and in a bulk “Review existing bookmarks” flow.
+- Target mainstream users who hop between browsers and devices. Prefer simple, obvious UX over power-user complexity in v1.
+- Follow every rule in the parent template’s `AGENTS.md`, `docs/INITIALIZATION_PROMPT.md`, `docs/ux-ui-guidelines.md`, file-size budgets, test-first policy, Conventional Commits, and security defaults.
+- After `init-project`, keep this file as the Sacred product brief. Update `docs/spec.md`, `docs/plan.md`, and `BUILD_PLAN.md` from it; do not let the product drift.
+
+**First milestone:** 1. Scaffold the extension (Chromium + Firefox) that can request a folder and write a minimal SyncMark data structure into it.
 <!-- product-brief-sync:end -->
 
 ### Project Purpose

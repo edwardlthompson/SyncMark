@@ -1,62 +1,86 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 0 · **0 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 2 · HUMAN 4 · ADB 0 · **6 open**
 <!-- /remaining-tally -->
+
+Live board for SyncMark. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+
+**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts  
+**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud — [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md)  
+**State:** 🔲 open · ✅ done · ❌ blocked — reason
+
+Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Smoke gate: after every `[AGENT]` row run `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`.
+
+---
+
+## Product
 
 ### Product (do not drift)
 
 > Auto-managed from `AGENT.md` after init. Do not hand-edit inside markers. Read `AGENT.md` before any sprint row.
 
 <!-- product-brief-sync:begin -->
-_Template maintainer: no product AGENT.md. Children write AGENT.md before init._
+> Read `AGENT.md` before any sprint row.
+
+**One-liner:** Local-first, self-hosted browser extension that unifies bookmarks across browsers, checks dead links, suggests categories, and syncs via a user-owned folder + pairing code — no accounts, no cloud required.
+**Do not drift:** local-first, self-hosted, browser-extension, webextensions, bookmarks, dead-link-checker, category-suggestions, folder-sync, pairing-code, p2p-ish, privacy, foss, no-cloud, no-login
+
+**Rules:**
+- Pure FOSS under MIT. No proprietary SDKs, no mandatory cloud, no user accounts, no OAuth in the core product.
+- Local-first: all bookmark data lives in a user-chosen folder on disk. The extension never sends bookmark content to any remote server operated by the project.
+- Pairing is done with a short human-enterable code (or QR) that lets another browser/device join the same SyncMark space by pointing at the same (or synced) folder and sharing a secret for integrity.
+- Auto-categorization only **suggests**; the user always makes the final decision. Suggestions appear on every new save and in a bulk “Review existing bookmarks” flow.
+- Target mainstream users who hop between browsers and devices. Prefer simple, obvious UX over power-user complexity in v1.
+- Follow every rule in the parent template’s `AGENTS.md`, `docs/INITIALIZATION_PROMPT.md`, `docs/ux-ui-guidelines.md`, file-size budgets, test-first policy, Conventional Commits, and security defaults.
+- After `init-project`, keep this file as the Sacred product brief. Update `docs/spec.md`, `docs/plan.md`, and `BUILD_PLAN.md` from it; do not let the product drift.
+
+**First milestone:** 1. Scaffold the extension (Chromium + Firefox) that can request a folder and write a minimal SyncMark data structure into it.
 <!-- product-brief-sync:end -->
 
-Live board for **this template repo**. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md). Child products use [`BUILD_PLAN_TEMPLATE.md`](BUILD_PLAN_TEMPLATE.md) (copied onto their `BUILD_PLAN.md` at init).
+### Sprint 0 — Customize
 
-**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts
-**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud — see [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md)
-**State:** 🔲 open · ✅ done · ❌ blocked — reason
+<!-- parallel_exception: stack not selected until init -->
 
-Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix` (or `[CLOUD]`). Sequential `[AGENT]` first. Parallel scopes: [`docs/PARALLEL_AGENT_SCOPES.md`](docs/PARALLEL_AGENT_SCOPES.md). `/build` on This Computer picks LOCAL only; Cloud picks CLOUD only. HUMAN/ADB after automation → `HUMAN_BACKLOG.md`.
+1. ✅ [AGENT][LOCAL] Copy Sacred brief → `AGENT.md` before init — scope: AGENT.md
+2. ✅ [AGENT][LOCAL] Run `scripts/init-project.ps1` non-interactive (`web`, SyncMark, MIT, prune) — scope: scripts/
+3. ✅ [AGENT][LOCAL] Fill `branding/product.json` (`mode: product`); sync tokens + README — scope: branding/
+4. ✅ [AGENT][LOCAL] Run `scripts/setup-github-repo.ps1` (`gh` admin) — scope: scripts/
+5. 🔲 [AUTO] Sprint 0 sign-off on `main`: `validate-bootstrap --quick` · `feature-gate --stack web` · `check-github-ci --wait 300` · `check-license-compliance`
+6. ✅ [HUMAN] Create GitHub child from template (via `gh repo create --template`)
+7. ✅ [HUMAN] FOSS tier selected at init
+8. 🔲 [HUMAN] Skim `docs/INITIALIZATION_PROMPT.md` / `docs/CURSOR_MODES.md`
+9. 🔲 [HUMAN] Bookmark `docs/help/BATCH_COMMANDS.md` (`/tour`, `/coach`)
+10. 🔲 [HUMAN] Approve Sprint 0 when AUTO gates are green
 
-## Smoke gate (hard stop)
+### Sprint 1–4 — MVP extension (shipped)
 
-After every `[AGENT]` row: `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`
+<!-- parallel_exception: MVP vertical slices completed; archive in COMPLETED_TASKS -->
 
-After the **last** `[AGENT]`/`[AUTO]` row in a sprint is ✅, do **not** start the next sprint until this exits 0:
+1. ✅ [AGENT][LOCAL] Extension scaffold + SyncMark space file layout — scope: extension/
+2. ✅ [AGENT][LOCAL] Import + dedupe + pairing code join — scope: extension/src/core/
+3. ✅ [AGENT][LOCAL] Dead-link checker + suggest + review UI — scope: extension/src/
+4. ✅ [AGENT][LOCAL] Search, export HTML/JSON/MD, protocol docs — scope: extension/,docs/
+5. ✅ [AUTO] `cd extension && npm test && npm run build`
+6. 🔲 [HUMAN] Approve ADR-0001 and product smoke (install → import → pair → suggest → health → export)
 
-```bash
-python3 scripts/agent-run.py smoke-sprint --require
+### Waiting on a person
 
-```
+_None for Android; SyncMark is web-extension only in MVP._
 
-That command re-smokes **every** ✅ row: no errors or crashes, plus startup time and load order. Details: [`docs/SPRINT_SMOKE.md`](docs/SPRINT_SMOKE.md). Fail → leave the last row open or ❌; fix; re-run. `/gates` wrap-up includes the same check.
+### Open PRs (synced)
 
----
+<!-- open-prs-sync:begin -->
+- 🔲 [AUTO] Merge Dependabot [#1](https://github.com/edwardlthompson/SyncMark/pull/1) (Bump anchore/sbom-action from 0.24.2 to 0.24.3 in the github-actions group)
+<!-- open-prs-sync:end -->
 
-## Template Maintainer
+### Template gaps (synced)
 
-**Now:** AGENT board empty. After Cloud work, `/resume`. Child model: [`BUILD_PLAN_TEMPLATE.md`](BUILD_PLAN_TEMPLATE.md).
-
-> **v1.8.0** release archived in COMPLETED_TASKS.md @ `1cafc11`.
-> **M64** archived in COMPLETED_TASKS.md @ `86bc12c`.
-> **M63** archived in COMPLETED_TASKS.md @ `9b7870b`.
-> **v1.6.0** release archived in COMPLETED_TASKS.md @ `d4cb35b`.
-> **M62** archived in COMPLETED_TASKS.md @ `81d165b`.
-> **v1.5.0** release archived in COMPLETED_TASKS.md @ `9808229`.
-> **v1.4.0** release archived in COMPLETED_TASKS.md @ `f105c3b`.
-> **v1.3.0** release archived in COMPLETED_TASKS.md @ `7ca6dbf`.
-> **M61** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M60** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M59** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M58** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M57** archived in COMPLETED_TASKS.md @ `e65513d`. Nav smoke ADB archived 2026-09-10.
-> **Waiting HUMAN/ADB auto** archived in COMPLETED_TASKS.md @ `ca0edfb`.
+<!-- template-gaps-sync:begin -->
+_No template gaps; .template-version matches upstream (or template maintainer N/A)._
+<!-- template-gaps-sync:end -->
 
 ### UX & UI inventory
-
-Complete list from construction gaps and `/ux-review`. Status is only planned / in_progress / done. `/build` does not execute these until `/ux-apply UX-NNN` (or a Sequential row).
 
 <!-- ux-inventory:begin -->
 _No UX inventory items._
@@ -64,61 +88,24 @@ _No UX inventory items._
 
 ### Local agent (This Computer)
 
-Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`. `/build` and `/feature` claim these only. Isolation: [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md).
-
 <!-- local-agent-lane:begin -->
 _No local agent items._
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)
 
-Standing queue for Cursor Cloud Agents. Rows: `🔲 [AGENT][CLOUD] … — scope: path`. Cloud claims these only (`cursor/*` branches). Never edit Local lane or `[LOCAL]` rows.
-
 <!-- cloud-agent-lane:begin -->
 _No cloud agent items._
 <!-- cloud-agent-lane:end -->
-
-### M58 — Smart local agent + Cline VS Code parity
-
-1. ✅ [AGENT] Local-model docs + `templates/ollama/` Modelfiles — scope: docs/LOCAL_MODELS.md, docs/help/LOCAL_*.md, templates/ollama/
-2. ✅ [AGENT] `recommend-model` / `setup-local` / `compress-memory` + check-local-compute wire-up — scope: scripts/
-3. ✅ [AGENT] Migrate `.clinerules` → directory, workflows, AGENTS local protocol — scope: .clinerules/, AGENTS.md, scripts/lib/agent_adapters.py
-4. ✅ [AGENT] Tests + CHANGELOG for local-agent / Cline workflows — scope: tests/, CHANGELOG.md
-
-### Open PRs (synced)
-
-> Auto-managed. Do not hand-edit rows inside the markers. Run `python3 scripts/agent-run.py sync-open-prs-build-plan -- --apply` (or `/resume` / `/dependabot`).
-
-<!-- open-prs-sync:begin -->
-_No open Dependabot or Release Please PRs._
-<!-- open-prs-sync:end -->
-
-### Template gaps (synced)
-
-> Auto-managed Monday cron + `sync-template-gaps-build-plan`. Do not hand-edit inside markers. Plan-only — run `/upgrade` then name item numbers.
-
-<!-- template-gaps-sync:begin -->
-_No template gaps; .template-version matches upstream (or template maintainer N/A)._
-<!-- template-gaps-sync:end -->
-
-### Waiting on a person
-
-_None._ Lightroom stub smoke is `feature-gate --stack lightroom` (Lua/SDK), not Plug-in Manager. Raster icons are `blender-icons` QA, not a HUMAN export.
-
-Done on this board: **v1.8.0** · **M64** cost/brevity · **M63** Local/Cloud venues · **v1.6.0** · **M62** UX/UI construction law · **v1.5.0** · **v1.4.0** · **v1.3.0** · **M61** back/nav/gates · **M60** CI clarity · **M59** CI harden · **M58** ship CI + Espresso · **M57** Cursor + docs · smart local agent + Cline workflows · **M56** desktop packaging · **M55** CI / security · **M54** catalog / Lightroom · **M53** Android distribution · **M52** UI / a11y / nav · **M51** CLI / API · **M50** chrome follow-through · **M49** Settings-only chrome · **M48** R8 + memory (#95 on `main`) · **M47** Cline + nav. Archive: `COMPLETED_TASKS.md`.
 
 ---
 
 ## Ongoing Maintenance
 
-Not a checklist. GitHub Monday 07:00 UTC (`.github/workflows/weekly-health-check.yml`) already runs CI wait, security triage, upgrade-sim (template) or parent template-gap BUILD_PLAN sync (child), radar, `update-deps` dry-run, Dependabot leftover list, open-PR BUILD_PLAN sync, and latest-release SBOM. `/ship` owns pre-release and the release tag.
-
-Open Dependabot / Release Please PRs are mirrored into **Open PRs (synced)** above; child catch-up rows land in **Template gaps (synced)** — allowed board automation, not standing chore rows. After Cloud Agents, use `/resume` on This Computer.
-
-If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5. Do not put those chores back on this board. [`docs/GROK_BOTS.md`](docs/GROK_BOTS.md) · [`docs/CURSOR_AUTOMATIONS.commercial.md`](docs/CURSOR_AUTOMATIONS.commercial.md)
+Not a checklist. GitHub Monday cron (`.github/workflows/weekly-health-check.yml`) already runs CI wait, security triage, parent template-gap BUILD_PLAN sync, radar, `update-deps` dry-run, Dependabot leftover list, open-PR BUILD_PLAN sync, and latest-release SBOM. `/ship` owns pre-release and the release tag.
 
 ---
 
 ## Archive
 
-Older sprints and releases: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
