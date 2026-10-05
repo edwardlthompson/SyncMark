@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 2 · HUMAN 4 · ADB 0 · **6 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 1 · HUMAN 4 · ADB 0 · **5 open**
 <!-- /remaining-tally -->
 
 Live board for SyncMark. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
@@ -46,7 +46,7 @@ Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Smoke gate: aft
 2. ✅ [AGENT][LOCAL] Run `scripts/init-project.ps1` non-interactive (`web`, SyncMark, MIT, prune) — scope: scripts/
 3. ✅ [AGENT][LOCAL] Fill `branding/product.json` (`mode: product`); sync tokens + README — scope: branding/
 4. ✅ [AGENT][LOCAL] Run `scripts/setup-github-repo.ps1` (`gh` admin) — scope: scripts/
-5. 🔲 [AUTO] Sprint 0 sign-off on `main`: `validate-bootstrap --quick` · `feature-gate --stack web` · `check-github-ci --wait 300` · `check-license-compliance`
+5. ✅ [AUTO] Sprint 0 sign-off on `main`: `validate-bootstrap --quick` · `feature-gate --stack web` · `check-github-ci --wait 300` · `check-license-compliance` (web job green on CI)
 6. ✅ [HUMAN] Create GitHub child from template (via `gh repo create --template`)
 7. ✅ [HUMAN] FOSS tier selected at init
 8. 🔲 [HUMAN] Skim `docs/INITIALIZATION_PROMPT.md` / `docs/CURSOR_MODES.md`
