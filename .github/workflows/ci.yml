@@ -167,6 +167,7 @@ jobs:
         with:
           enable-cache: true
       - uses: actions/setup-java@v6
+        if: hashFiles('examples/android/gradlew') != ''
         with:
           distribution: temurin
           java-version: "21"
