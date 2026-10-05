@@ -26,11 +26,12 @@ jobs:
       python: ${{ steps.stacks.outputs.python }}
       web: ${{ steps.stacks.outputs.web }}
       node: ${{ steps.stacks.outputs.node }}
+      android: ${{ steps.stacks.outputs.android }}
     steps:
       - uses: actions/checkout@v7
       - id: stacks
         run: |
-          for spec in python:examples/python/pyproject.toml web:examples/web/package-lock.json node:examples/node/package-lock.json; do
+          for spec in python:examples/python/pyproject.toml web:examples/web/package-lock.json node:examples/node/package-lock.json android:examples/android/gradlew; do
             key="${spec%%:*}"
             path="${spec#*:}"
             if [ -f "$path" ]; then
@@ -188,7 +189,7 @@ jobs:
       - name: Run feature gate (active stack)
         run: |
           set -euo pipefail
-          STACK="$(python3 -c "import json; print(json.load(open('bootstrap.config.json'))['stack'])")"
+          STACK=$(python3 -c 'import json; print(json.load(open("bootstrap.config.json"))["stack"])')
           bash scripts/feature-gate.sh --stack "$STACK" --strict --json
 
   plugin-pack:
@@ -356,7 +357,8 @@ jobs:
 
   android-structure:
     name: Android - Structure Validation
-    if: hashFiles('examples/android/gradlew') != ''
+    needs: stack-presence
+    if: needs.stack-presence.outputs.android == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -398,7 +400,8 @@ jobs:
 
   android-build:
     name: Android - assembleDebug
-    if: hashFiles('examples/android/gradlew') != ''
+    needs: stack-presence
+    if: needs.stack-presence.outputs.android == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -605,7 +608,8 @@ jobs:
 
   android-release:
     name: Android - assembleRelease
-    if: hashFiles('examples/android/gradlew') != ''
+    needs: stack-presence
+    if: needs.stack-presence.outputs.android == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
