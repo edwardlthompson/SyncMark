@@ -151,3 +151,9 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 - Folded Unreleased; pushing main for Release Please #106.
 - UnifiedPush ntfy E2E + BroadcastReceiver discovery; HUMAN/ADB waiting automation.
 - About lego: Rust CARGO_PKG_VERSION; Python test_about_parity split.
+
+## Milestone 2026-10-06 — SyncMark v1.10.0 /ship
+
+- Two-way sync + Windows one-click helper + link delivery notifications shipped.
+- Release Please Actions cannot create PRs on this repo; opened PR #2 manually and admin-merged; created GitHub Release `v1.10.0` by hand then uploaded SBOM+OpenVEX.
+- Left HUMAN smoke row on BUILD_PLAN Sprint 5 for Chrome↔Firefox verification.

@@ -17,6 +17,13 @@
 
 ## Entries
 
+### 2026-10-06 — SyncMark v1.10.0 /ship
+- **Status:** Accepted
+- **Context:** Two-way sync, Windows one-click native helper, link delivery notifications, and Organize tools were ready; Release Please could not open PRs (Actions PR permission off); CodeQL “patch” pins resolved to invalid `vcodeql-bundle-*` tags.
+- **Decision:** Ship **1.10.0**. Manually open Release Please branch as PR #2 and admin-merge. Create GitHub Release `v1.10.0` by hand, then run `release.yml` for SBOM+OpenVEX. Leave CodeQL on `@v4`. Bump extension vitest to 5.x for tinypool CRITICAL.
+- **Alternatives considered:** Wait for Actions “Allow GitHub Actions to create PRs” (deferred to human repo setting). Apply bogus CodeQL pins (rejected).
+- **Consequences:** Tag **v1.10.0** with SBOM+OpenVEX; enable Actions create-PR for future Release Please automation.
+
 ### 2026-10-04 — v1.9.0 /ship
 - **Status:** Accepted
 - **Context:** Local-agent + VS Code Cline parity ready; main was 48 commits behind Dependabot/RP history; pre-commit large-file check hung on Windows Git Bash; RP #119 branch workflows stayed ction_required.
