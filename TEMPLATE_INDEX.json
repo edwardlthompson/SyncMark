@@ -1,5 +1,5 @@
 {
-  "template_version": "1.9.0",
+  "template_version": "1.10.0",
   "project": {
     "name": "SyncMark",
     "purpose": "Local-first browser extension that unifies bookmarks across browsers with dead-link checks, category suggestions, and folder sync via pairing code — no accounts, no cloud",
