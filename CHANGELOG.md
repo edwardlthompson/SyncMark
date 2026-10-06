@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0](https://github.com/edwardlthompson/SyncMark/compare/v1.10.0...v1.11.0) (2026-10-06)
+
+
+### Added
+
+* bootstrap SyncMark and ship MVP browser extension ([f1f0a0d](https://github.com/edwardlthompson/SyncMark/commit/f1f0a0d907bdef5f26ce1f29e32e21db2dbfccad))
+* **extension:** ship SyncMark two-way sync and instant helper ([06e33a3](https://github.com/edwardlthompson/SyncMark/commit/06e33a33d31c164fe41af42f5ae8f55e1132fbc9))
+
+
+### Fixed
+
+* **build-plan:** mark Sprint 5 as sequential-only Parallel exception ([1d21871](https://github.com/edwardlthompson/SyncMark/commit/1d2187121bf9632b94266329991153b40db4cf93))
+* **changelog:** keep Unreleased as the first version heading ([18d1c10](https://github.com/edwardlthompson/SyncMark/commit/18d1c10d4cfab17ba0a6a4bc96cef7813ae9d2cf))
+* **ci:** gate pruned stacks for web-only SyncMark ([cd29211](https://github.com/edwardlthompson/SyncMark/commit/cd292119c1188ecdeb2d5db839c1adb45823517c))
+* **ci:** skip Android jobs via stack-presence outputs ([a5d009d](https://github.com/edwardlthompson/SyncMark/commit/a5d009de4e4a9eef22d14223737e6b4ab848f343))
+* **ci:** skip Java setup in feature-gate when Android is pruned ([ba58a87](https://github.com/edwardlthompson/SyncMark/commit/ba58a87ac356fff190d34c43b9cc4cd2c30fb13f))
+* **docs:** mention scripts/ in two-way-sync fallback validation ([9541e7e](https://github.com/edwardlthompson/SyncMark/commit/9541e7e446dd79e81033f6f79410225b6a335785))
+* **release:** sync leftover template version files to 1.10.0 ([fa9ca47](https://github.com/edwardlthompson/SyncMark/commit/fa9ca47e504c0a9cefeb4c1d6ba170525afa09cf))
+
 ## [Unreleased]
 
 ## [1.10.0](https://github.com/edwardlthompson/SyncMark/compare/v1.9.0...v1.10.0) (2026-10-06)
