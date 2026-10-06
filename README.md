@@ -9,7 +9,7 @@
 <p align="center"><strong>Your bookmarks, one folder, every browser — no account required</strong></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/template-1.9.0-656d76?style=flat-square" alt="template-1.9.0" />
+  <img src="https://img.shields.io/badge/template-1.10.0-656d76?style=flat-square" alt="template-1.10.0" />
   <img src="https://img.shields.io/badge/license-MIT-2ea043?style=flat-square" alt="MIT" />
   <img src="https://img.shields.io/badge/FOSS-no_tracking-656d76?style=flat-square" alt="FOSS" />
   <img src="https://img.shields.io/badge/status-active-2B6A4F?style=flat-square" alt="status" />
