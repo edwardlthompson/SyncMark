@@ -36,7 +36,8 @@
 
 ## Fallback validation
 
-- Command: `cd extension && npm test && npm run build`
+- Why tests are not feasible: N/A (automated tests exist)
+- Command: `cd extension && npm test && npm run build` (or `python scripts/agent-run.py feature-gate --stack web`)
 
 ## Definition of Done
 
