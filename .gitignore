@@ -112,3 +112,12 @@ CODE_REVIEW.md
 RELEASE_NOTES.md
 scratchpad.md
 .cursor/handoff-*.md
+
+# SyncMark native host (generated per machine)
+extension/host/config.json
+extension/host/syncmark-host.cmd
+extension/host/syncmark-host.sh
+extension/host/com.syncmark.host.*.json
+
+.cursor/upd-dry.json
+.cursor/upd-status.md

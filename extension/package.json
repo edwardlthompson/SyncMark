@@ -12,9 +12,9 @@
     "dev": "node scripts/build.mjs --watch"
   },
   "devDependencies": {
-    "@types/chrome": "^0.1.11",
+    "@types/chrome": "^0.1.43",
     "jsdom": "^30.1.2",
-    "typescript": "~5.9.2",
-    "vitest": "^3.2.4"
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.3"
   }
 }

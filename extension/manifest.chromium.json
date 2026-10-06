@@ -3,7 +3,7 @@
   "name": "SyncMark",
   "version": "0.1.0",
   "description": "Local-first bookmarks across browsers — folder sync, dead-link checks, category suggestions. No account.",
-  "permissions": ["bookmarks", "storage", "tabs", "contextMenus", "activeTab"],
+  "permissions": ["bookmarks", "storage", "tabs", "contextMenus", "activeTab", "notifications", "nativeMessaging"],
   "host_permissions": ["http://*/*", "https://*/*"],
   "background": {
     "service_worker": "background/sw.js",

@@ -22,7 +22,7 @@ function listTs(dir, acc = []) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) listTs(p, acc);
-    else if (name.endsWith(".ts") && !name.endsWith(".test.ts")) acc.push(p);
+    else if (name.endsWith(".ts") && !name.endsWith(".test.ts") && !name.endsWith(".d.ts")) acc.push(p);
   }
   return acc;
 }

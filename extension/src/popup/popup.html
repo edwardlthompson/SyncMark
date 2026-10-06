@@ -3,46 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>SyncMark</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <header>
-      <strong>SyncMark</strong>
-      <a href="../options/options.html" target="_blank" rel="noreferrer">Settings</a>
+      <h1>SyncMark</h1>
+      <a class="link-btn" href="../options/options.html" target="_blank" rel="noreferrer">Settings</a>
     </header>
 
     <section id="empty" class="panel hidden">
-      <p>No SyncMark space yet.</p>
+      <p>No SyncMark space yet. Create or open one in Settings to start saving and syncing.</p>
       <a class="btn primary" href="../options/options.html" target="_blank" rel="noreferrer">Open settings</a>
     </section>
 
     <section id="main" class="panel hidden">
-      <label>
-        Search
-        <input id="search" type="search" placeholder="Title, tag, or site" />
-      </label>
-
-      <div class="save card">
-        <h2>Save this page</h2>
-        <label>Title <input id="saveTitle" type="text" /></label>
-        <label>URL <input id="saveUrl" type="url" /></label>
-        <p id="suggestion" class="muted"></p>
-        <label>Category <input id="saveCategory" type="text" /></label>
+      <section class="card" aria-labelledby="h-save">
+        <h2 id="h-save">Save this page</h2>
+        <label>Title <input id="saveTitle" type="text" autocomplete="off" /></label>
+        <label>Folder <input id="saveCategory" type="text" autocomplete="off" placeholder="Top-level / Subfolder" /></label>
+        <p id="suggestion" class="muted" aria-live="polite"></p>
         <div class="row">
-          <button type="button" id="btnUseSuggestion" class="secondary">Use suggestion</button>
           <button type="button" id="btnSave" class="primary">Save bookmark</button>
+          <button type="button" id="btnUseSuggestion" class="secondary">Use suggestion</button>
+          <button type="button" id="btnRescan" class="secondary">Rescan page</button>
         </div>
+        <details class="fold">
+          <summary>Edit link address</summary>
+          <label>URL <input id="saveUrl" type="url" autocomplete="off" /></label>
+        </details>
         <p id="saveMsg" class="muted" role="status"></p>
-      </div>
+      </section>
 
-      <div class="row">
-        <button type="button" id="btnReview" class="secondary">Review suggestions</button>
-        <button type="button" id="btnRefresh" class="secondary">Refresh</button>
-      </div>
+      <section aria-labelledby="h-find">
+        <h2 id="h-find" class="sr">Find a bookmark</h2>
+        <input id="search" type="search" placeholder="Search title, tag, or site" aria-label="Search bookmarks" />
+        <p id="listMeta" class="muted"></p>
+        <ul id="list" class="list"></ul>
+      </section>
 
-      <ul id="list" class="list"></ul>
-      <div id="review" class="review hidden"></div>
+      <details class="fold">
+        <summary>Review folder suggestions</summary>
+        <p class="muted">
+          Checks up to 40 links. For your whole library, use Settings → Organize (AI export, 10 per page).
+        </p>
+        <div class="row">
+          <button type="button" id="btnReview" class="secondary">Scan &amp; categorize</button>
+        </div>
+        <div id="review" class="review hidden"></div>
+      </details>
     </section>
 
     <script type="module" src="popup.js"></script>

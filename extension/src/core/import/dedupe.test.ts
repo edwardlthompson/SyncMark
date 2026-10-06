@@ -6,6 +6,7 @@ function bm(partial: Partial<Bookmark> & Pick<Bookmark, "url" | "title">): Bookm
   return {
     id: partial.id ?? crypto.randomUUID(),
     category: partial.category ?? "General",
+    folderPath: partial.folderPath ?? [partial.category ?? "General"],
     tags: partial.tags ?? [],
     createdAt: partial.createdAt ?? "2026-01-01T00:00:00.000Z",
     updatedAt: partial.updatedAt ?? "2026-01-01T00:00:00.000Z",

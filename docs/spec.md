@@ -23,8 +23,8 @@
 **First milestone:** 1. Scaffold the extension (Chromium + Firefox) that can request a folder and write a minimal SyncMark data structure into it.
 <!-- product-brief-sync:end -->
 
-**Product:** SyncMark  
-**Purpose:** Give anyone a single, healthy, organized bookmark collection across Chrome, Edge, Firefox, Brave, and Opera without an account or cloud upload.  
+**Product:** SyncMark
+**Purpose:** Give anyone a single, healthy, organized bookmark collection across Chrome, Edge, Firefox, Brave, and Opera without an account or cloud upload.
 **Users:** Mainstream people who hop between browsers/devices and refuse another login.
 
 ## Functional Requirements & User Stories
@@ -38,7 +38,6 @@
 | FR-5 | As a user I review existing bookmarks for suggested categories | Accept / keep current per item; bulk review never auto-applies |
 | FR-6 | As a user I check links on demand | Health status stored in `health.json`; dead status never deletes bookmarks |
 | FR-7 | As a user I search and export | Search filters the list; export produces HTML, JSON, or Markdown |
-
 ## Non-Functional Constraints
 
 - MIT FOSS; no proprietary SDKs on the production path
@@ -54,14 +53,19 @@ Logical layout (also embedded in a portable `*.syncmark.json` bundle for cross-b
 
 ```
 <SyncMarkRoot>/
-  space.json              # id, name, secretHash, createdAt, version
-  changelog.jsonl         # append-only mutation events
+  space.json                 # id, name, secretHash, createdAt, version, devices[]
+  changelog/
+    <deviceId>.jsonl         # per-device append-only ops (one writer per file)
   snapshots/
-    bookmarks.json        # materialised Bookmark[]
-  health.json             # { [bookmarkId]: HealthRecord }
+    bookmarks.json           # materialised Bookmark[] (derived)
+  tombstones.json            # soft deletes for cross-browser remove
+  health.json                # { [bookmarkId]: HealthRecord }
+
 ```
 
-MVP packaging: the extension persists an active space in extension storage and **Download SyncMark file** writes a single JSON bundle containing `space`, `bookmarks`, `changelog`, `health`, and (when available) `pairingSecret` for the owner. Place that file in a user-synced folder (Syncthing, Dropbox, etc.) to share across devices.
+Legacy `changelog.jsonl` at the root is migrated once into the local device log.
+
+MVP packaging: the extension persists an active space in extension storage; optional **Save folder pack** writes a zip backup. Sync Now does not require zip extract.
 
 ### Pairing protocol
 
@@ -76,10 +80,11 @@ flowchart LR
   ExtA[Browser_A_extension] --> Folder[SyncMark_folder]
   ExtB[Browser_B_extension] --> Folder
   Pair[Pairing_code] --> ExtB
-  Folder --> Log[changelog.jsonl]
+  Folder --> Log[changelog_device_jsonl]
   Folder --> Snap[snapshots_bookmarks.json]
   ExtA --> Suggest[local_heuristics]
   ExtA --> Dead[on_demand_link_check]
+
 ```
 
 See [`docs/adr/0010-local-folder-pairing.md`](adr/0010-local-folder-pairing.md).

@@ -1,6 +1,6 @@
 # SyncMark extension
 
-Local-first browser extension (Chromium MV3 + Firefox). Bookmark data lives in a SyncMark space file you own — no accounts, no project-operated cloud.
+Local-first browser extension (Chromium MV3 + Firefox). Bookmark data lives in a folder you choose on disk — no accounts, no project-operated cloud.
 
 ## Develop
 
@@ -9,6 +9,7 @@ cd extension
 npm install
 npm test
 npm run build
+
 ```
 
 Load unpacked:
@@ -19,16 +20,16 @@ Load unpacked:
 ## First-run path
 
 1. Open **Settings** from the popup.
-2. **Create SyncMark space** (or open a `.syncmark.json` file).
-3. Copy the pairing code and **Download SyncMark file** if you will pair another browser.
-4. **Import from this browser**.
-5. Use the popup to save pages (suggestions are confirm-only), **Review suggestions**, and **Check links** from Settings.
+2. **Create SyncMark space…** (Chrome/Edge) or open an existing data folder (Firefox: directory picker).
+3. Click **Sync now** — merges your **existing** browser bookmark folders with the shared space (no duplicate SyncMark dump folder; no zip required).
+4. Use **Review** in the popup to accept folder/category suggestions (including “create folder” tips). Link scan is advisory only.
+5. Copy the pairing code for other browsers that open the same data folder.
 
-Pairing another browser: open the same SyncMark file (or a copy kept in sync via Syncthing/Dropbox/etc.), enter the pairing code under **Join an existing space**.
+On disk: `space.json`, `changelog/<deviceId>.jsonl`, `snapshots/bookmarks.json`, `tombstones.json`, `health.json`.
 
 ## Layout
 
 - `src/core/` — pure domain logic (tested)
-- `src/options/` — create/open/join/import/export/health
+- `src/options/` — folder create/open/join + sync
 - `src/popup/` — search, save, review
 - `src/background/` — service worker + context menu

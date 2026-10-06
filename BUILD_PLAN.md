@@ -1,13 +1,13 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 1 · HUMAN 4 · ADB 0 · **5 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 1 · HUMAN 5 · ADB 0 · **6 open**
 <!-- /remaining-tally -->
 
 Live board for SyncMark. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
 
-**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts  
-**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud — [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md)  
+**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts
+**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud — [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md)
 **State:** 🔲 open · ✅ done · ❌ blocked — reason
 
 Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Smoke gate: after every `[AGENT]` row run `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`.
@@ -63,6 +63,12 @@ Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Smoke gate: aft
 4. ✅ [AGENT][LOCAL] Search, export HTML/JSON/MD, protocol docs — scope: extension/,docs/
 5. ✅ [AUTO] `cd extension && npm test && npm run build`
 6. 🔲 [HUMAN] Approve ADR-0001 and product smoke (install → import → pair → suggest → health → export)
+
+### Sprint 5 — Two-way sync + shared-folder DB
+
+1. ✅ [AGENT][LOCAL] True 2-way sync (in-place folders, tombstones, per-writer logs, suggest+scan) — scope: extension/,docs/features/two-way-sync.md
+2. ✅ [AUTO] `cd extension && npm test && npm run build` after reload smoke
+3. 🔲 [HUMAN] Smoke Sync Now across Chrome + Firefox on existing bookmark folders (no SyncMark mirror dump)
 
 ### Waiting on a person
 

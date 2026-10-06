@@ -3,70 +3,312 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>SyncMark settings</title>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
-    <main class="wrap">
-      <header>
+    <div class="shell">
+      <aside class="side">
         <h1>SyncMark</h1>
-        <p class="lede">Your bookmarks stay in a folder you own. No account. No cloud from us.</p>
-      </header>
+        <p id="navStatus" class="muted" role="status">No folder linked yet.</p>
+        <nav id="nav" aria-label="Settings sections">
+          <a href="#setup" data-tab="setup">Data folder</a>
+          <a href="#sync" data-tab="sync">Sync &amp; links</a>
+          <a href="#organize" data-tab="organize">Organize</a>
+          <a href="#export" data-tab="export">Export</a>
+        </nav>
+      </aside>
 
-      <section class="card" id="setup">
-        <h2>Your SyncMark space</h2>
-        <p id="spaceStatus" class="muted">No space yet. Create one or open a saved SyncMark file.</p>
-        <label>
-          Space name
-          <input id="spaceName" type="text" placeholder="My bookmarks" autocomplete="off" />
-        </label>
-        <div class="row">
-          <button type="button" id="btnCreate" class="primary">Create SyncMark space</button>
-          <label class="file-btn">
-            Open SyncMark file
-            <input id="fileOpen" type="file" accept="application/json,.json,.syncmark.json" hidden />
-          </label>
-        </div>
-        <div id="pairingBox" class="hidden">
-          <h3>Pairing code</h3>
-          <p class="muted">Enter this in another browser after it opens the same SyncMark file (or a copy kept in sync).</p>
-          <code id="pairingCode" class="code"></code>
-          <button type="button" id="btnCopyPair" class="secondary">Copy code</button>
-          <button type="button" id="btnExportBundle" class="secondary">Download SyncMark file</button>
-        </div>
-      </section>
+      <main class="content">
+        <!-- ============ Data folder ============ -->
+        <div class="panel" data-panel="setup">
+          <section class="card" id="setup" aria-labelledby="h-setup">
+            <h2 id="h-setup">Your SyncMark data folder</h2>
+            <p id="spaceStatus" class="muted">No folder linked yet.</p>
+            <p id="browserHint" class="muted"></p>
+            <label>
+              Space name (for a new space)
+              <input id="spaceName" type="text" placeholder="My bookmarks" autocomplete="off" />
+            </label>
+            <div class="row">
+              <button type="button" id="btnCreate" class="primary">Create SyncMark space…</button>
+              <button type="button" id="btnOpenFolder" class="secondary">Open SyncMark folder…</button>
+            </div>
+            <div id="ffFolderRow" class="row hidden">
+              <label class="file-btn">
+                Open SyncMark folder (Firefox)
+                <input id="dirOpen" type="file" webkitdirectory directory multiple hidden />
+              </label>
+              <label class="file-btn">
+                Open SyncMark file (.json)
+                <input id="fileOpen" type="file" accept="application/json,.json,.syncmark.json" hidden />
+              </label>
+            </div>
+            <p id="folderHint" class="muted">
+              Tip: keep the folder in Syncthing or Dropbox. Each browser writes only its own changelog, so edits merge
+              cleanly.
+            </p>
+            <div id="pairingBox" class="hidden">
+              <h3>Pairing code</h3>
+              <p class="muted">Enter this code in another browser that opens the same folder.</p>
+              <code id="pairingCode" class="code"></code>
+              <div class="row">
+                <button type="button" id="btnCopyPair" class="secondary">Copy code</button>
+                <button type="button" id="btnSavePack" class="secondary">Backup folder (.zip)…</button>
+              </div>
+            </div>
+          </section>
 
-      <section class="card">
-        <h2>Join an existing space</h2>
-        <label>
-          Pairing code
-          <input id="joinCode" type="text" placeholder="SM-XXXXXXXXXX-XXXXXXXXXXXXXXXX" autocomplete="off" />
-        </label>
-        <label class="file-btn">
-          Choose SyncMark file to join
-          <input id="fileJoin" type="file" accept="application/json,.json,.syncmark.json" hidden />
-        </label>
-        <p id="joinMsg" class="muted" role="status"></p>
-      </section>
-
-      <section class="card">
-        <h2>Import &amp; health</h2>
-        <div class="row">
-          <button type="button" id="btnImport" class="primary">Import from this browser</button>
-          <button type="button" id="btnCheckLinks" class="secondary">Check links</button>
+          <details class="card fold">
+            <summary>Join an existing space (from another browser)</summary>
+            <label>
+              Pairing code
+              <input id="joinCode" type="text" placeholder="SM-XXXXXXXXXX-XXXXXXXXXXXXXXXX" autocomplete="off" />
+            </label>
+            <div class="row">
+              <button type="button" id="btnJoinFolder" class="primary">Choose folder &amp; join…</button>
+              <label id="ffJoinLabel" class="file-btn hidden">
+                Choose folder (Firefox)
+                <input id="dirJoin" type="file" webkitdirectory directory multiple hidden />
+              </label>
+            </div>
+            <p id="joinMsg" class="muted" role="status"></p>
+          </details>
         </div>
-        <p id="importMsg" class="muted" role="status"></p>
-      </section>
 
-      <section class="card">
-        <h2>Export</h2>
-        <div class="row">
-          <button type="button" id="btnExportHtml" class="secondary">HTML</button>
-          <button type="button" id="btnExportJson" class="secondary">JSON</button>
-          <button type="button" id="btnExportMd" class="secondary">Markdown</button>
+        <!-- ============ Sync & links ============ -->
+        <div class="panel hidden" data-panel="sync">
+          <section class="card" aria-labelledby="h-sync">
+            <h2 id="h-sync">Sync &amp; link check</h2>
+            <p class="muted">
+              SyncMark syncs on its own whenever bookmarks change. Use <strong>Sync now</strong> for first setup or to
+              pull in links you dropped on the bar.
+            </p>
+            <div class="row">
+              <button type="button" id="btnCheckLinks" class="primary">Check links</button>
+              <button type="button" id="btnSync" class="secondary">Sync now</button>
+              <button type="button" id="btnImport" class="secondary">Import from browser only</button>
+            </div>
+            <p id="importMsg" class="muted" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="card" id="helperCard" aria-labelledby="h-helper">
+            <h2 id="h-helper">Instant sync (recommended)</h2>
+            <p class="muted">
+              Makes your browsers share bookmark changes within a second or two, with no folder picking. Setup takes
+              about 30 seconds, once.
+            </p>
+            <ol id="helperSteps" class="muted">
+              <li>Click <strong>Set up instant sync</strong>.</li>
+              <li>
+                Open the downloaded file <strong>SyncMark-Setup</strong>. If your browser warns about it, choose
+                <strong>Keep</strong>.
+              </li>
+              <li>Come back here. It connects by itself.</li>
+            </ol>
+            <div class="row">
+              <button type="button" id="btnHelperSetup" class="primary">Set up instant sync</button>
+              <button type="button" id="btnHelperTest" class="secondary">Test connection</button>
+            </div>
+            <label class="check">
+              <input id="helperOn" type="checkbox" />
+              <span>Instant sync is on</span>
+            </label>
+            <p id="helperStatus" class="muted" role="status" aria-live="polite"></p>
+            <details id="helperAdvanced" class="fold">
+              <summary>Advanced: macOS, Linux, or manual install</summary>
+              <p class="muted">Needs Node 22+. Run from the SyncMark folder:</p>
+              <code id="helperCmd" class="code"></code>
+              <div class="row">
+                <button type="button" id="btnHelperCopy" class="secondary">Copy command</button>
+              </div>
+            </details>
+          </section>
+
+          <section class="card" id="exchangeCard" aria-labelledby="h-exch">
+            <h2 id="h-exch">Share changes between browsers</h2>
+            <p id="exchangeIntro" class="muted"></p>
+            <div id="exchangeFf" class="hidden">
+              <label class="check">
+                <input id="autoPublish" type="checkbox" />
+                <span>Publish my changes automatically after each sync</span>
+              </label>
+              <div class="row">
+                <button type="button" id="btnPublish" class="secondary">Publish my changes now</button>
+              </div>
+            </div>
+            <div id="exchangeCh" class="hidden">
+              <div class="row">
+                <button type="button" id="btnInbox" class="secondary">Choose Firefox publish folder…</button>
+              </div>
+              <p id="inboxName" class="muted"></p>
+            </div>
+            <p id="exchangeMsg" class="muted" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="card hidden" id="healthReport" aria-labelledby="h-health">
+            <h2 id="h-health">Link check report</h2>
+            <p id="healthSummary" class="muted"></p>
+            <div class="toolbar">
+              <div class="row">
+                <button type="button" id="btnShowDead" class="secondary">Show dead</button>
+                <button type="button" id="btnShowErrors" class="secondary">Show errors</button>
+                <button type="button" id="btnSelectAll" class="secondary">Select page</button>
+                <button type="button" id="btnClearSelection" class="secondary">Clear selection</button>
+              </div>
+              <div class="row">
+                <button type="button" id="btnRecheckErrors" class="secondary">Recheck all errors</button>
+                <button type="button" id="btnRecheckSelected" class="secondary">Recheck selected</button>
+                <button type="button" id="btnRemoveSelected" class="danger">Delete selected…</button>
+                <button type="button" id="btnRemoveDead" class="danger">Remove all dead…</button>
+              </div>
+            </div>
+            <p id="selectionMsg" class="muted" aria-live="polite">0 selected</p>
+            <div id="healthList" class="review" role="list"></div>
+            <div class="row pager">
+              <button type="button" id="btnHealthPrev" class="secondary" disabled>Previous 10</button>
+              <span id="healthPageLabel" class="muted">Page 1</span>
+              <button type="button" id="btnHealthNext" class="secondary" disabled>Next 10</button>
+            </div>
+          </section>
+
+          <details class="card fold">
+            <summary>Sync issues (diagnostics)</summary>
+            <p class="muted">
+              Errors are saved in <code>diagnostics/&lt;device&gt;-sync-issues.jsonl</code> in the shared folder and
+              kept locally.
+            </p>
+            <div class="row">
+              <button type="button" id="btnRefreshIssues" class="secondary">Refresh issue log</button>
+            </div>
+            <pre id="syncIssues" class="code issues" role="status">No issues loaded yet.</pre>
+          </details>
         </div>
-      </section>
-    </main>
+
+        <!-- ============ Organize ============ -->
+        <div class="panel hidden" data-panel="organize">
+          <section class="card" aria-labelledby="h-sort">
+            <h2 id="h-sort">Sort links into folders</h2>
+
+            <h3>Best accuracy: use your own AI</h3>
+            <ol class="steps muted">
+              <li><strong>Export</strong> a Markdown file (instructions are inside it).</li>
+              <li>Give it to ChatGPT, Claude, Grok, Gemini… and download the <code>.md</code> it returns.</li>
+              <li><strong>Import</strong> it here and review the suggestions below. Nothing is sent anywhere by SyncMark.</li>
+            </ol>
+            <div class="row">
+              <button type="button" id="btnLlmExport" class="primary">Export for AI (.md)</button>
+              <button type="button" id="btnLlmImport" class="secondary">Import AI answer (.md)</button>
+              <input id="llmFile" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden />
+            </div>
+            <details class="fold inner">
+              <summary>Export options</summary>
+              <div class="row fields">
+                <label class="inline-field">Include
+                  <select id="llmScope">
+                    <option value="uncategorized">Uncategorized only</option>
+                    <option value="all">All links (re-check categories)</option>
+                  </select>
+                </label>
+                <label class="inline-field">Links per file
+                  <input id="llmBatch" type="number" min="10" max="1000" value="150" />
+                </label>
+                <label class="inline-field">Part
+                  <input id="llmPart" type="number" min="1" value="1" />
+                </label>
+              </div>
+              <p class="muted">
+                Exporting changes nothing, so repeat as often as you like. Accept each part before exporting the next.
+              </p>
+            </details>
+            <p id="llmMsg" class="muted" role="status"></p>
+
+            <h3>Without AI</h3>
+            <div class="row">
+              <button type="button" id="btnTighten" class="secondary">Tighten existing folders</button>
+              <button type="button" id="btnScanCategorize" class="secondary">Scan &amp; suggest (online lookup)</button>
+            </div>
+            <p class="muted">
+              <strong>Tighten</strong> merges Games→Gaming and Audio→Music, shortens long names, and drops generic
+              subfolders. <strong>Scan</strong> checks each unsorted page and Wikidata when you click.
+            </p>
+          </section>
+
+          <section class="card" aria-labelledby="h-review">
+            <div class="card-head">
+              <h2 id="h-review">Review suggestions</h2>
+              <div class="row">
+                <button type="button" id="btnAcceptAllCats" class="secondary">Accept page</button>
+                <button type="button" id="btnAcceptEveryCat" class="secondary">Accept all pages…</button>
+              </div>
+            </div>
+            <p id="catMsg" class="muted" role="status">
+              No suggestions yet. Import an AI answer, or use Tighten / Scan above.
+            </p>
+            <div id="catReview" class="review"></div>
+            <div class="row pager">
+              <button type="button" id="btnCatPrev" class="secondary" disabled>Previous 10</button>
+              <span id="catPageLabel" class="muted">Page 1</span>
+              <button type="button" id="btnCatNext" class="secondary" disabled>Next 10</button>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="h-dupes">
+            <h2 id="h-dupes">Duplicate links</h2>
+            <p class="muted">
+              Finds the same link saved in more than one folder. Nothing is removed until you confirm, and one copy of
+              every link is always kept.
+            </p>
+            <div class="row">
+              <button type="button" id="btnFindDupes" class="secondary">Check for duplicate links</button>
+              <button type="button" id="btnRemoveDupes" class="danger" disabled>Remove extra copies…</button>
+            </div>
+            <p id="dupeMsg" class="muted" role="status" aria-live="polite"></p>
+            <div id="dupeList" class="review"></div>
+            <div class="row pager">
+              <button type="button" id="btnDupePrev" class="secondary" disabled>Previous 10</button>
+              <span id="dupePageLabel" class="muted">Page 0 / 0</span>
+              <button type="button" id="btnDupeNext" class="secondary" disabled>Next 10</button>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="h-bar">
+            <h2 id="h-bar">Bookmarks bar</h2>
+            <p class="muted">Applies to the bar and every folder in it, in this browser. Folders are listed first.</p>
+            <label class="check">
+              <input id="sortFoldersAuto" type="checkbox" />
+              <span>Keep folders A–Z automatically</span>
+            </label>
+            <label class="check">
+              <input id="sortLinksAuto" type="checkbox" />
+              <span>Keep links A–Z automatically <span class="muted">(off = my own order)</span></span>
+            </label>
+            <div class="row">
+              <button type="button" id="btnSortFolders" class="secondary">Sort folders now</button>
+              <button type="button" id="btnSortLinks" class="secondary">Sort links now</button>
+              <button type="button" id="btnCleanEmpty" class="secondary">Clean up empty folders…</button>
+            </div>
+            <p id="sortMsg" class="muted" role="status"></p>
+            <p id="cleanMsg" class="muted" role="status"></p>
+          </section>
+        </div>
+
+        <!-- ============ Export ============ -->
+        <div class="panel hidden" data-panel="export">
+          <section class="card" aria-labelledby="h-export">
+            <h2 id="h-export">Export bookmarks</h2>
+            <p class="muted">Download a copy of everything in your SyncMark space.</p>
+            <div class="row">
+              <button type="button" id="btnExportHtml" class="secondary">HTML (browser import)</button>
+              <button type="button" id="btnExportJson" class="secondary">JSON</button>
+              <button type="button" id="btnExportMd" class="secondary">Markdown</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="tabs.js"></script>
     <script type="module" src="options.js"></script>
   </body>
 </html>

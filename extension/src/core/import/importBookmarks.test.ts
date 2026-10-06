@@ -21,5 +21,24 @@ describe("importFromBrowserTree", () => {
       "https://github.com/x",
     ]);
     expect(out.find((b) => b.url.includes("github"))?.category).toBe("Dev");
+    expect(out.find((b) => b.url.includes("github"))?.folderPath).toEqual(["Bar", "Dev"]);
+    expect(out.find((b) => b.url.includes("docs"))?.folderPath).toEqual(["Bar"]);
+  });
+
+  it("maps Firefox toolbar root to Bookmarks Toolbar path", () => {
+    const out = importFromBrowserTree([
+      {
+        id: "root________",
+        title: "",
+        children: [
+          {
+            id: "toolbar_____",
+            title: "Bookmarks Toolbar",
+            children: [{ title: "Dropped", url: "https://dropped.example/x" }],
+          },
+        ],
+      },
+    ]);
+    expect(out[0]?.folderPath).toEqual(["Bookmarks Toolbar"]);
   });
 });

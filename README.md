@@ -52,7 +52,9 @@ SyncMark is a local-first browser extension that unifies bookmarks across Chrome
 
 1. Clone the repo and open `extension/` (Node 20+).
 2. Run `npm install` then `npm test` and `npm run build`.
-3. Load the unpacked build in Chrome/Edge (`dist/chromium`) or Firefox (`dist/firefox`), choose a SyncMark folder, and import bookmarks.
+3. Load the unpacked build in Chrome/Edge (`dist/chromium`) or Firefox (`dist/firefox`).
+4. Create or open a SyncMark **data** folder, then **Sync now** — builds on your existing bookmark folders (no zip; no SyncMark mirror dump).
+5. Firefox: open the same data folder via **Open SyncMark folder (Firefox)** when exchanging the on-disk database; Sync Now still updates browser folders in place.
 
 ## For humans
 
@@ -68,6 +70,7 @@ flowchart TD
   Readme --> Agents[START_HERE]
   Agents --> Tour["/tour or TOUR.md"]
   Tour --> Coach["/coach"]
+
 ```
 
 ## Install

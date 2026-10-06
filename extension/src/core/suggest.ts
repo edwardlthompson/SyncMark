@@ -1,55 +1,104 @@
+import { lookupDomainCategory, mapToExistingFolder } from "./domainCatalog.js";
+import { canonicalTopLevel, shortName } from "./folderTaxonomy.js";
 import type { Bookmark, Suggestion } from "./types.js";
 
-const DOMAIN_RULES: Array<{ match: RegExp; category: string; tags: string[]; reason: string }> = [
-  { match: /github\.com|gitlab\.com|bitbucket\.org/i, category: "Development", tags: ["code"], reason: "Code hosting domain" },
-  { match: /stackoverflow\.com|stackexchange\.com|mdn\.io|developer\.mozilla/i, category: "Development", tags: ["docs"], reason: "Developer docs" },
-  { match: /youtube\.com|youtu\.be|vimeo\.com|netflix\.com/i, category: "Media", tags: ["video"], reason: "Video site" },
-  { match: /nytimes\.com|bbc\.(com|co\.uk)|theguardian\.com|reuters\.com/i, category: "News", tags: ["news"], reason: "News domain" },
-  { match: /amazon\.|ebay\.|etsy\.|shopify\./i, category: "Shopping", tags: ["shop"], reason: "Shopping domain" },
-  { match: /mail\.google\.com|outlook\.|proton\.me/i, category: "Productivity", tags: ["email"], reason: "Mail service" },
-  { match: /docs\.google\.com|notion\.so|dropbox\.com|drive\.google/i, category: "Productivity", tags: ["docs"], reason: "Docs / files" },
-  { match: /twitter\.com|x\.com|linkedin\.com|facebook\.com|instagram\.com/i, category: "Social", tags: ["social"], reason: "Social network" },
-  { match: /wikipedia\.org/i, category: "Reference", tags: ["wiki"], reason: "Wikipedia" },
-];
-
-const TITLE_RULES: Array<{ match: RegExp; category: string; tags: string[]; reason: string }> = [
-  { match: /\brecipe\b|\bcook(ing)?\b/i, category: "Food", tags: ["recipe"], reason: "Title mentions cooking" },
-  { match: /\btutorial\b|\bhow to\b|\bguide\b/i, category: "Learning", tags: ["tutorial"], reason: "Title looks like a guide" },
-];
-
-export function suggestCategory(input: Pick<Bookmark, "url" | "title">): Suggestion {
-  for (const rule of DOMAIN_RULES) {
-    if (rule.match.test(input.url)) {
-      return { category: rule.category, tags: rule.tags, reason: rule.reason };
-    }
+function existingFolders(bookmarks: Bookmark[]): Set<string> {
+  const set = new Set<string>();
+  for (const b of bookmarks) {
+    for (const part of b.folderPath ?? []) if (part) set.add(part);
+    if (b.category) set.add(b.category);
   }
-  for (const rule of TITLE_RULES) {
-    if (rule.match.test(input.title)) {
-      return { category: rule.category, tags: rule.tags, reason: rule.reason };
-    }
+  return set;
+}
+
+function titleCaseHostBrand(url: string, siteName?: string): string {
+  if (siteName?.trim()) {
+    return siteName.trim().replace(/\s+/g, " ").slice(0, 48);
   }
   try {
-    const host = new URL(input.url).hostname.replace(/^www\./, "");
-    const label = host.split(".")[0] || "General";
-    return {
-      category: "General",
-      tags: [label.toLowerCase()],
-      reason: "Default suggestion from domain",
-    };
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    const parts = host.split(".");
+    // drop TLD-ish last part when 2+ labels
+    const brand = parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+    return brand.charAt(0).toUpperCase() + brand.slice(1);
   } catch {
-    return { category: "General", tags: [], reason: "Default suggestion" };
+    return "Unsorted";
   }
 }
 
+function heuristicCategory(
+  input: Pick<Bookmark, "url" | "title"> & { siteName?: string },
+): Suggestion {
+  const hit = lookupDomainCategory(input.url, input.title);
+  if (hit && hit.category.toLowerCase() !== "general") {
+    // Same short, canonical vocabulary as the AI path (Development → Dev, Media → Video/Music, …).
+    const isAudio = hit.tags.some((t) => /music|podcast|audio/i.test(t));
+    return { category: isAudio ? "Music" : canonicalTopLevel(hit.category), tags: hit.tags, reason: hit.reason };
+  }
+  const brand = shortName(titleCaseHostBrand(input.url, input.siteName), 14);
+  return {
+    category: brand,
+    tags: [brand.toLowerCase()],
+    reason: `Specific site folder “${brand}” (no vague General bucket)`,
+  };
+}
+
+/** Suggest a folder/category, preferring folders that already exist in the space. */
+export function suggestCategory(
+  input: Pick<Bookmark, "url" | "title"> &
+    Partial<Pick<Bookmark, "folderPath" | "category">> & { siteName?: string },
+  knownBookmarks: Bookmark[] = [],
+): Suggestion {
+  const base = heuristicCategory(input);
+  const folders = existingFolders(knownBookmarks);
+
+  const mapped = mapToExistingFolder(base.category, folders);
+  if (mapped) {
+    return {
+      ...base,
+      category: mapped,
+      createFolder: false,
+      folderPath: [...(input.folderPath?.slice(0, -1) ?? []), mapped],
+      reason: `${base.reason} → your folder “${mapped}”`,
+    };
+  }
+
+  for (const name of folders) {
+    if (/^(other bookmarks|bookmarks (bar|toolbar|menu)|general)$/i.test(name)) continue;
+    const re = new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    if (re.test(input.title) || re.test(input.url)) {
+      return {
+        category: name,
+        tags: base.tags,
+        reason: `Fits your existing “${name}” folder`,
+        createFolder: false,
+        folderPath: [...(input.folderPath?.slice(0, -1) ?? []), name],
+      };
+    }
+  }
+
+  return {
+    ...base,
+    createFolder: !folders.has(base.category),
+    reason: folders.has(base.category)
+      ? base.reason
+      : `${base.reason} — create folder “${base.category}”`,
+    folderPath: [base.category],
+  };
+}
+
+/** Only unlocked bookmarks are candidates for scan/suggest. */
 export function reviewSuggestions(
   bookmarks: Bookmark[],
 ): Array<{ bookmark: Bookmark; suggestion: Suggestion; differs: boolean }> {
-  return bookmarks.map((bookmark) => {
-    const suggestion = suggestCategory(bookmark);
-    return {
-      bookmark,
-      suggestion,
-      differs: suggestion.category !== bookmark.category,
-    };
-  });
+  return bookmarks
+    .filter((b) => !b.categoryLocked)
+    .map((bookmark) => {
+      const suggestion = suggestCategory(bookmark, bookmarks);
+      return {
+        bookmark,
+        suggestion,
+        differs: suggestion.category !== bookmark.category,
+      };
+    });
 }

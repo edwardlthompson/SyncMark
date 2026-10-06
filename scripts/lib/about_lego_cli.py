@@ -90,35 +90,42 @@ def _cut(path: Path, needle: str) -> None:
 
 
 def strip(root: Path) -> None:
-    _unlink(
-        root,
-        "examples/rust/src/about.rs",
-        "examples/go/about.go",
-        "examples/go/http_about.go",
-        "examples/go/http_about_test.go",
-    )
-    lib = (root / "examples/rust/src/lib.rs").read_text(encoding="utf-8")
-    write_lf(root / "examples/rust/src/lib.rs", lib.replace("pub mod about;\n", ""))
-    _copy_stub("rust-main.rs", root / "examples/rust/src/main.rs")
-    _cut(root / "examples/rust/src/log.rs", '    let _ = writeln!(stdout, "{}", crate::about::summary());\n')
-    _copy_stub("go-main.go", root / "examples/go/main.go")
-    _cut(root / "examples/go/log.go", "\tfmt.Fprintln(stdout, AboutSummary())\n")
-    go_test = root / "examples/go/about_test.go"
-    write_lf(go_test, _drop_all(go_test.read_text(encoding="utf-8"), r"\nfunc TestAbout[A-Za-z0-9]*\([\s\S]*?\n\}\n"))
-    _unlink(root, "examples/node/src/about.ts", "examples/node/src/about.test.ts", "examples/node/src/openapi.test.ts")
-    _copy_stub("node-app.ts", root / "examples/node/src/app.ts")
-    node_test = root / "examples/node/src/app.test.ts"
-    text = _drop_all(
-        node_test.read_text(encoding="utf-8"),
-        r"\n  it\(\"(?:returns About payload|returns a GitHub feedback URL)[\s\S]*?\n  \}\);\n",
-    )
-    write_lf(node_test, re.sub(r"\n+\n\}\);\s*\Z", "\n});\n", text))
-    _unlink(root, "examples/python/src/hello/about.py", "examples/python/tests/test_about.py", "examples/python/tests/test_about_parity.py")
-    _copy_stub("python-cli.py", root / "examples/python/src/hello/cli.py")
-    _copy_stub("python-test-openapi.py", root / "examples/python/tests/test_openapi.py")
-    py_test = root / "examples/python/tests/test_cli.py"
-    text = _drop(py_test.read_text(encoding="utf-8"), r"\n\ndef test_main_about[\s\S]*\Z")
-    write_lf(py_test, text.replace("import json\n", "").rstrip() + "\n")
+    if (root / "examples/rust/Cargo.toml").is_file():
+        _unlink(root, "examples/rust/src/about.rs")
+        lib = (root / "examples/rust/src/lib.rs").read_text(encoding="utf-8")
+        write_lf(root / "examples/rust/src/lib.rs", lib.replace("pub mod about;\n", ""))
+        _copy_stub("rust-main.rs", root / "examples/rust/src/main.rs")
+        _cut(root / "examples/rust/src/log.rs", '    let _ = writeln!(stdout, "{}", crate::about::summary());\n')
+    if (root / "examples/go/go.mod").is_file() or (root / "examples/go/main.go").is_file():
+        _unlink(root, "examples/go/about.go", "examples/go/http_about.go", "examples/go/http_about_test.go")
+        _copy_stub("go-main.go", root / "examples/go/main.go")
+        _cut(root / "examples/go/log.go", "\tfmt.Fprintln(stdout, AboutSummary())\n")
+        go_test = root / "examples/go/about_test.go"
+        if go_test.is_file():
+            write_lf(go_test, _drop_all(go_test.read_text(encoding="utf-8"), r"\nfunc TestAbout[A-Za-z0-9]*\([\s\S]*?\n\}\n"))
+    if (root / "examples/node/package.json").is_file():
+        _unlink(root, "examples/node/src/about.ts", "examples/node/src/about.test.ts", "examples/node/src/openapi.test.ts")
+        _copy_stub("node-app.ts", root / "examples/node/src/app.ts")
+        node_test = root / "examples/node/src/app.test.ts"
+        if node_test.is_file():
+            text = _drop_all(
+                node_test.read_text(encoding="utf-8"),
+                r"\n  it\(\"(?:returns About payload|returns a GitHub feedback URL)[\s\S]*?\n  \}\);\n",
+            )
+            write_lf(node_test, re.sub(r"\n+\n\}\);\s*\Z", "\n});\n", text))
+    if (root / "examples/python/pyproject.toml").is_file():
+        _unlink(
+            root,
+            "examples/python/src/hello/about.py",
+            "examples/python/tests/test_about.py",
+            "examples/python/tests/test_about_parity.py",
+        )
+        _copy_stub("python-cli.py", root / "examples/python/src/hello/cli.py")
+        _copy_stub("python-test-openapi.py", root / "examples/python/tests/test_openapi.py")
+        py_test = root / "examples/python/tests/test_cli.py"
+        if py_test.is_file():
+            text = _drop(py_test.read_text(encoding="utf-8"), r"\n\ndef test_main_about[\s\S]*\Z")
+            write_lf(py_test, text.replace("import json\n", "").rstrip() + "\n")
 
 
 def main() -> None:

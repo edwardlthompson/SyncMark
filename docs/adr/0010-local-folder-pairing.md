@@ -15,9 +15,15 @@ SyncMark must unify bookmarks across browsers without accounts or a project-oper
 ### Persistence
 
 - The **user-owned SyncMark space** is the sole source of truth for bookmark content.
-- Logical layout: `space.json`, `changelog.jsonl`, `snapshots/bookmarks.json`, `health.json`.
-- MVP packaging: portable `*.syncmark.json` bundle (same fields) for create/open/join across Chromium and Firefox.
-- v1 merge strategy: append-only changelog + materialised snapshot (CRDT later).
+- Logical layout:
+  - `space.json` (includes `devices[]` registry)
+  - `changelog/<deviceId>.jsonl` — **one writer per file** (append-only); avoids Dropbox/Syncthing conflict copies
+  - `snapshots/bookmarks.json` — materialised view rebuilt from all device logs
+  - `tombstones.json` — soft deletes with `deletedAt` for cross-browser propagation
+  - `health.json` — advisory link status
+- Legacy root `changelog.jsonl` is migrated once into the local device log.
+- Portable `*.syncmark.json` bundle remains supported for create/open/join.
+- v1 merge: deterministic LWW on `(at, deviceId, seq)` for scalars; tag set-union; tombstone vs revive rules. Full CRDT later.
 
 ### Pairing
 

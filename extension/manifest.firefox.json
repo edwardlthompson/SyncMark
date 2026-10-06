@@ -9,7 +9,7 @@
       "strict_min_version": "121.0"
     }
   },
-  "permissions": ["bookmarks", "storage", "tabs", "contextMenus", "activeTab"],
+  "permissions": ["bookmarks", "storage", "tabs", "contextMenus", "activeTab", "notifications", "downloads", "nativeMessaging"],
   "host_permissions": ["http://*/*", "https://*/*"],
   "background": {
     "scripts": ["background/sw.js"],

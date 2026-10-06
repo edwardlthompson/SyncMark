@@ -247,10 +247,22 @@ cli_gate() {
   local stack="$1"
   local step="$2"
   case "$stack" in
-    rust) command -v cargo >/dev/null 2>&1 || { echo "SKIP rust About $step (cargo not found)"; return 0; } ;;
-    go) command -v go >/dev/null 2>&1 || { echo "SKIP go About $step (go not found)"; return 0; } ;;
-    node) command -v npm >/dev/null 2>&1 || { echo "SKIP node About $step (npm not found)"; return 0; } ;;
-    python) command -v uv >/dev/null 2>&1 || { echo "SKIP python About $step (uv not found)"; return 0; } ;;
+    rust)
+      [ -f examples/rust/Cargo.toml ] || { echo "SKIP rust About $step (examples/rust pruned)"; return 0; }
+      command -v cargo >/dev/null 2>&1 || { echo "SKIP rust About $step (cargo not found)"; return 0; }
+      ;;
+    go)
+      [ -f examples/go/main.go ] || { echo "SKIP go About $step (examples/go pruned)"; return 0; }
+      command -v go >/dev/null 2>&1 || { echo "SKIP go About $step (go not found)"; return 0; }
+      ;;
+    node)
+      [ -f examples/node/package.json ] || { echo "SKIP node About $step (examples/node pruned)"; return 0; }
+      command -v npm >/dev/null 2>&1 || { echo "SKIP node About $step (npm not found)"; return 0; }
+      ;;
+    python)
+      [ -f examples/python/pyproject.toml ] || { echo "SKIP python About $step (examples/python pruned)"; return 0; }
+      command -v uv >/dev/null 2>&1 || { echo "SKIP python About $step (uv not found)"; return 0; }
+      ;;
   esac
   bash scripts/feature-gate.sh --stack "$stack" --skip-preamble --step "$step"
 }

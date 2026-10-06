@@ -1,5 +1,11 @@
-import { dedupeBookmarks, normalizeUrl } from "./dedupe.js";
+import {
+  classifyBookmarkRoot,
+  isSkipPathSegment,
+  rootPathLabel,
+  stripImportWrappers,
+} from "../bookmarkRoots.js";
 import type { Bookmark } from "../types.js";
+import { dedupeBookmarks, normalizeUrl } from "./dedupe.js";
 
 export interface BrowserBookmarkNode {
   id?: string;
@@ -9,10 +15,18 @@ export interface BrowserBookmarkNode {
   children?: BrowserBookmarkNode[];
 }
 
-function walk(nodes: BrowserBookmarkNode[], category: string, out: Bookmark[]): void {
+function walk(nodes: BrowserBookmarkNode[], path: string[], out: Bookmark[]): void {
   for (const node of nodes) {
-    if (node.children?.length) {
-      const next = node.title?.trim() || category;
+    if (node.children) {
+      const title = node.title?.trim() ?? "";
+      // Only the tree's top-level folders are roots; a nested folder titled "Bookmarks bar" is just a folder.
+      const kind = node.id && path.length === 0 ? classifyBookmarkRoot(node.id, title) : null;
+      let next = path;
+      if (kind) {
+        next = [rootPathLabel(kind)];
+      } else if (!isSkipPathSegment(node.id, title)) {
+        next = [...path, title];
+      }
       walk(node.children, next, out);
       continue;
     }
@@ -20,11 +34,13 @@ function walk(nodes: BrowserBookmarkNode[], category: string, out: Bookmark[]): 
     const created = node.dateAdded
       ? new Date(node.dateAdded).toISOString()
       : new Date().toISOString();
+    const folderPath = path.length ? stripImportWrappers(path) : ["Other Bookmarks"];
     out.push({
       id: crypto.randomUUID(),
       url: normalizeUrl(node.url),
       title: node.title?.trim() || node.url,
-      category: category || "Imported",
+      category: folderPath[folderPath.length - 1] || "Other Bookmarks",
+      folderPath,
       tags: [],
       createdAt: created,
       updatedAt: created,
@@ -33,8 +49,9 @@ function walk(nodes: BrowserBookmarkNode[], category: string, out: Bookmark[]): 
   }
 }
 
+/** Import the full browser tree, including Bookmarks Toolbar / bar drops. */
 export function importFromBrowserTree(roots: BrowserBookmarkNode[]): Bookmark[] {
   const collected: Bookmark[] = [];
-  walk(roots, "Imported", collected);
+  walk(roots, [], collected);
   return dedupeBookmarks(collected);
 }
