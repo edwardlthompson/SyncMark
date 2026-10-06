@@ -66,6 +66,8 @@ Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Smoke gate: aft
 
 ### Sprint 5 — Two-way sync + shared-folder DB
 
+<!-- parallel_exception: sequential vertical slice; Parallel N/A for this feature -->
+
 1. ✅ [AGENT][LOCAL] True 2-way sync (in-place folders, tombstones, per-writer logs, suggest+scan) — scope: extension/,docs/features/two-way-sync.md
 2. ✅ [AUTO] `cd extension && npm test && npm run build` after reload smoke
 3. 🔲 [HUMAN] Smoke Sync Now across Chrome + Firefox on existing bookmark folders (no SyncMark mirror dump)
