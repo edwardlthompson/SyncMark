@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [1.10.0](https://github.com/edwardlthompson/SyncMark/compare/v1.9.0...v1.10.0) (2026-10-06)
 
 
@@ -22,8 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * **ci:** skip Android jobs via stack-presence outputs ([a5d009d](https://github.com/edwardlthompson/SyncMark/commit/a5d009de4e4a9eef22d14223737e6b4ab848f343))
 * **ci:** skip Java setup in feature-gate when Android is pruned ([ba58a87](https://github.com/edwardlthompson/SyncMark/commit/ba58a87ac356fff190d34c43b9cc4cd2c30fb13f))
 * **docs:** mention scripts/ in two-way-sync fallback validation ([9541e7e](https://github.com/edwardlthompson/SyncMark/commit/9541e7e446dd79e81033f6f79410225b6a335785))
-
-## [Unreleased]
 
 ## [1.9.0](https://github.com/edwardlthompson/agent-project-bootstrap/compare/v1.8.0...v1.9.0) (2026-10-04)
 
