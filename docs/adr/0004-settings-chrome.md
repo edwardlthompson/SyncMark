@@ -30,7 +30,7 @@ Golden Path home chrome accumulated Settings, About, donate, and a theme toggle.
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Null/empty at boundary | Disabled/empty `donations.json` hides Support; feedback dropdown omitted if both callbacks missing |
 | Network timeout | N/A — chrome and menus are local; update/donate fetch unchanged |
 | Race conditions | Theme persist stays in existing DataStore / `localStorage` writers; no extra header listeners |
