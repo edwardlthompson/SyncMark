@@ -25,7 +25,7 @@ Fourteen `alwaysApply` Cursor rules plus a “read START_HERE + AGENTS + CURSOR_
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Demoting foss-compliance weakens FOSS | Gitleaks + destructive-ops always-on; CI license/CodeQL remain |
 | scripts-only misses Android break | Wide still for modules/workflows; CI/`/gates --full` |
 | Short replies hide failures | Failures name command + one fix line |

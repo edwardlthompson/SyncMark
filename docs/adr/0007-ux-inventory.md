@@ -24,7 +24,7 @@ Agents shipped UI from Golden Path tokens but had no product-quality bar except 
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Null/empty UI stack | Review writes 0 items; do not invent screens. Gate allows empty stub. |
 | Network timeout | Build path has no network. Review `--quick` skips live compare. |
 | Race on inventory | Merge by `UX-NNN`; `check-ux-inventory` fails on duplicate ids. |

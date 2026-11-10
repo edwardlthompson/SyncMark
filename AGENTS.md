@@ -28,7 +28,7 @@ This repository is a **GitHub Template** for FOSS projects with coding agents (C
 ## Environment & Dependency Management
 
 | Tool | Role |
-|------|------|
+| ------ | ------ |
 | Python 3.11+ | Init, gates, adapters (`scripts/lib/resolve-python.sh`) |
 | Git | Required — preflight fails if missing |
 | Node 22 + npm | Web / Node stacks |
@@ -123,7 +123,7 @@ bash scripts/bootstrap-lifecycle.sh --sync-adapters
 ```
 
 | Target | File |
-|--------|------|
+| -------- | ------ |
 | Cursor | `.cursor/rules/main.mdc` |
 | Claude Code | `CLAUDE.md` |
 | GitHub Copilot | `.github/copilot-instructions.md` |

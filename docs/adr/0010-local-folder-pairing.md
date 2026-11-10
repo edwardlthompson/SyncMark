@@ -45,7 +45,7 @@ SyncMark must unify bookmarks across browsers without accounts or a project-oper
 ## Alternatives Considered
 
 | Pattern | Rejected because |
-|---------|------------------|
+| --------- | ------------------ |
 | Project-hosted sync API | Violates Sacred brief (no cloud / no login) |
 | Browser sync storage only | Does not unify across browser vendors or expose a user-owned file |
 | Full CRDT (Automerge/Yjs) in v1 | Valuable but heavier; JSON bundle first for inspectability |
