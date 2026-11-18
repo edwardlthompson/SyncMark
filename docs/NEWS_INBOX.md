@@ -25,3 +25,15 @@ A Cursor planning agent should review these items and fold the useful ones into 
 **Tasks for the planning agent**
 
 - [x] Audit the repo for wfx-loot IOCs — Checks for the wfx-docs branch/PR, .ci-*.sh files, build-audit-*.yml workflows and new npm lifecycle hooks, since the campaign steals CI secrets and Cursor credentials. Label: `[AGENT][LOCAL]` · Priority: P1 · https://blog.gitguardian.com/wfx-loot-a-ci-secret-stealer-pushed-with-stolen-github-credentials/ (synced to BUILD_PLAN)
+
+## 2026-11-18
+
+Catch-up for Nov 17–18 (the daily brief did not run those mornings).
+
+**News and updates**
+
+- Chrome 158 is on the stable channel (158.0.8127.36/.37 desktop, 158.0.8127.42 Android) with 204 security fixes. [source](https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01699533288.html)
+
+**Tasks for the planning agent**
+
+- [ ] Retest the extension on Chrome 158 — Users will be on 158 quickly, and the release includes 204 security fixes on top of the earlier 157 retest. Label: `[AGENT][LOCAL]` · Priority: P3 · https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01699533288.html
