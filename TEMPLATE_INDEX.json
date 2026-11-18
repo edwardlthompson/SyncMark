@@ -1,5 +1,5 @@
 {
-  "template_version": "1.10.0",
+  "template_version": "1.13.0",
   "project": {
     "name": "SyncMark",
     "purpose": "Local-first browser extension that unifies bookmarks across browsers with dead-link checks, category suggestions, and folder sync via pairing code — no accounts, no cloud",
@@ -965,7 +965,7 @@
       "owner": "maintainer"
     },
     {
-      "path": "AGENT_MEMORY.md",
+      "path": ".agent/AGENT_MEMORY.md",
       "purpose": "Tech stack, threat model, retrospectives index",
       "read_when": "session_start",
       "update_when": "milestone_boundary",
@@ -3190,6 +3190,31 @@
       "path": ".github/workflows/sbom-diff-dependabot.yml",
       "role": "gate",
       "notes": "Indexed for TEMPLATE_INDEX completeness"
+    },
+    {
+      "path": ".github/workflows/argus-remote-stub.yml",
+      "purpose": "CI remote status no-op when disabled",
+      "status": "not_started"
+    },
+    {
+      "path": ".github/workflows/argus-rules-manifest.yml",
+      "purpose": "Publish rules.manifest.json on main",
+      "status": "not_started"
+    },
+    {
+      "path": "argus.contract.json",
+      "purpose": "Argus contract markers",
+      "status": "not_started"
+    },
+    {
+      "path": "argus.remote.json",
+      "purpose": "Argus remote off switch",
+      "status": "not_started"
+    },
+    {
+      "path": "rules.manifest.json",
+      "purpose": "Rules manifest",
+      "status": "not_started"
     }
   ],
   "modules": {

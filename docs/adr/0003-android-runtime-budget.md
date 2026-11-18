@@ -26,7 +26,7 @@ Compose August 2026 (BOM `2026.08.00`, Compose 1.12) already matches this repo (
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Null/empty at boundary | `MemoryBudget.isLimiterKill` treats null/blank description as not a limiter kill; unit tests cover it |
 | Network timeout | N/A — no new network I/O |
 | Race | `CrashCapture.install` stays idempotent; limiter read is `runCatching` on `Application.onCreate` |

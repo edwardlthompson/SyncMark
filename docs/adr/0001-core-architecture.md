@@ -49,6 +49,6 @@ Choose a primary architecture pattern for the application layer. Document the ch
 ## Alternatives Considered
 
 | Pattern | Rejected because |
-|---------|------------------|
+| --------- | ------------------ |
 | Monolith MVC | TBD |
 | No structure | TBD |

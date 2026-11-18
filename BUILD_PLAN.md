@@ -97,7 +97,8 @@ _No UX inventory items._
 ### Local agent (This Computer)
 
 <!-- local-agent-lane:begin -->
-_No local agent items._
+- 🔲 [AGENT][LOCAL] Audit the repo for wfx-loot IOCs — scope: .github/,extension/package.json (news P1, 2026-11-14) https://blog.gitguardian.com/wfx-loot-a-ci-secret-stealer-pushed-with-stolen-github-credentials/
+- 🔲 [AGENT][LOCAL] Review new local-first sync engines for two-way sync — scope: extension/,docs/features/two-way-sync.md (news P2, 2026-11-13) https://www.localfirstnews.com/2026-11-12/
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)
