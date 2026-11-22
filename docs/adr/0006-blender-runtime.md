@@ -24,7 +24,7 @@ Child repos need a Golden Path to batch photoreal app icons (Cycles, optional NV
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Null/empty at boundary | Manifest schema requires `id`/`seed`; CLI exit 2 |
 | Network timeout | N/A — local Blender only |
 | Race conditions | One Blender process per CLI; `--resume` uses content hashes |

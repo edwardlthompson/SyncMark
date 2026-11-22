@@ -29,7 +29,7 @@ Agent tooling ecosystems invent parallel “memory” files (`.agents/agents.md`
 ### Critique
 
 | Issue | Resolution |
-|-------|------------|
+| ------- | ------------ |
 | Null/empty at boundary | N/A — documentation ADR; no runtime I/O |
 | Network timeout | N/A |
 | Race conditions | N/A |

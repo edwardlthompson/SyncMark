@@ -97,7 +97,8 @@ _No UX inventory items._
 ### Local agent (This Computer)
 
 <!-- local-agent-lane:begin -->
-_No local agent items._
+- 🔲 [AGENT][LOCAL] Audit the repo for wfx-loot IOCs — scope: .github/,extension/package.json (news P1, 2026-11-14) https://blog.gitguardian.com/wfx-loot-a-ci-secret-stealer-pushed-with-stolen-github-credentials/
+- 🔲 [AGENT][LOCAL] Review new local-first sync engines for two-way sync — scope: extension/,docs/features/two-way-sync.md (news P2, 2026-11-13) https://www.localfirstnews.com/2026-11-12/
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)
@@ -117,3 +118,19 @@ Not a checklist. GitHub Monday cron (`.github/workflows/weekly-health-check.yml`
 ## Archive
 
 Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+
+<!-- argus-portfolio-chores:start -->
+## Argus portfolio chores
+
+Synced from argus-runner (2026-11-18). Prefer YOLO maintain on the runner; keep these until cleared.
+
+| Status | Venue | Task |
+|--------|-------|------|
+| 🔲 | `[AUTO][CLOUD]` | Clear open Dependabot alerts |
+
+```text
+Repo: edwardlthompson/SyncMark
+Merge green Dependabot PRs. Template Upgrade failures: rerun once; else leave for parent upgrade.
+Gate: Dependabot alert count 0.
+```
+<!-- argus-portfolio-chores:end -->
