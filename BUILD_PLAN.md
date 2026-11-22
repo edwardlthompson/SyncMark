@@ -118,3 +118,19 @@ Not a checklist. GitHub Monday cron (`.github/workflows/weekly-health-check.yml`
 ## Archive
 
 Older sprints: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+
+<!-- argus-portfolio-chores:start -->
+## Argus portfolio chores
+
+Synced from argus-runner (2026-11-18). Prefer YOLO maintain on the runner; keep these until cleared.
+
+| Status | Venue | Task |
+|--------|-------|------|
+| 🔲 | `[AUTO][CLOUD]` | Clear open Dependabot alerts |
+
+```text
+Repo: edwardlthompson/SyncMark
+Merge green Dependabot PRs. Template Upgrade failures: rerun once; else leave for parent upgrade.
+Gate: Dependabot alert count 0.
+```
+<!-- argus-portfolio-chores:end -->
