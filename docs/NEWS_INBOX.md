@@ -37,3 +37,9 @@ Catch-up for Nov 17–18 (the daily brief did not run those mornings).
 **Tasks for the planning agent**
 
 - [ ] Retest the extension on Chrome 158 — Users will be on 158 quickly, and the release includes 204 security fixes on top of the earlier 157 retest. Label: `[AGENT][LOCAL]` · Priority: P3 · https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01699533288.html
+
+## 2026-11-26
+
+**News and updates**
+
+- Firefox 161 and Chrome 159 early stable shipped Nov 24 (Firefox adds CSS `random()`, CSS Typed OM, custom Async Clipboard formats and security fixes). The extenshi change pack lists no new extension-API breaks for either; the next listed change is Chrome 160 (Jan 5, 2027: runtime.onEnabled/onExtensionLoaded events no longer dropped). No action for SyncMark. [Firefox 161 notes](https://www.firefox.com/en-US/firefox/161.0/releasenotes/) · [Chrome releases](https://chromereleases.googleblog.com/) · [extenshi changes](https://cli.extenshi.io/changes)
